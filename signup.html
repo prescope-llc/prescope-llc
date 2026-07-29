@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sign Up — Prescope™</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.signup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:90px 24px 40px;}
+.signup-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:980px;width:100%;align-items:start;}
+.signup-left{padding-top:20px;}
+.signup-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--teal);text-transform:uppercase;margin-bottom:16px;}
+.signup-title{font-size:clamp(26px,3.5vw,38px);font-weight:700;letter-spacing:-.8px;line-height:1.15;margin-bottom:16px;}
+.signup-body{font-size:15px;color:var(--text-mid);line-height:1.7;margin-bottom:24px;}
+.feature-list{list-style:none;margin-bottom:24px;}
+.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-mid);margin-bottom:9px;line-height:1.5;}
+.feature-list li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;margin-top:2px;}
+.tier-compare{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.tier-head{display:grid;grid-template-columns:1fr 80px 80px;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);}
+.th{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;text-align:center;}
+.th:first-child{text-align:left;}
+.tier-row{display:grid;grid-template-columns:1fr 80px 80px;padding:10px 16px;border-bottom:1px solid var(--border);align-items:center;}
+.tier-row:last-child{border-bottom:none;}
+.tier-feat{font-size:13px;color:var(--text-mid);}
+.tier-free{font-size:13px;color:var(--text-dim);text-align:center;}
+.tier-paid{font-size:13px;color:var(--teal);text-align:center;font-weight:600;}
+.t-check{color:var(--teal);}
+.t-dash{color:var(--text-dim);}
+
+/* ── CARD ── */
+.signup-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden;}
+.card-head{padding:24px 28px 0;}
+.card-title{font-size:20px;font-weight:700;margin-bottom:4px;}
+.card-sub{font-size:13px;color:var(--text-mid);margin-bottom:20px;}
+.plan-tabs{display:flex;background:var(--surface2);border-radius:8px;padding:4px;gap:3px;margin-bottom:0;}
+.plan-tab{flex:1;text-align:center;padding:9px 6px;border-radius:6px;font-size:13px;font-weight:500;color:var(--text-dim);cursor:pointer;transition:all .2s;border:none;background:none;font-family:'Inter',sans-serif;}
+.plan-tab.active{background:var(--bg);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.5);}
+.plan-tab.teal.active{background:var(--teal);color:#020617;}
+
+.plan-body{display:none;padding:20px 28px 28px;}
+.plan-body.active{display:block;}
+
+/* Price */
+.price-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
+.price-num{font-size:30px;font-weight:700;letter-spacing:-.5px;}
+.price-num span{font-size:15px;font-weight:400;color:var(--text-mid);}
+.price-badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 9px;border-radius:4px;}
+.badge-free{background:var(--surface);border:1px solid var(--border-bright);color:var(--text-dim);}
+.badge-paid{background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);color:var(--teal);}
+.badge-save{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);color:#c4b5fd;}
+
+/* PRIMARY action button — large, teal */
+.btn-primary-lg{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;border-radius:10px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;margin-bottom:8px;}
+.btn-teal{background:var(--teal);color:#020617;}
+.btn-teal:hover{background:var(--teal-dim);transform:translateY(-1px);box-shadow:0 6px 20px rgba(20,184,166,.3);}
+.btn-purple{background:#7C3AED;color:#fff;}
+.btn-purple:hover{background:#6D28D9;transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,.3);}
+
+/* Google button — white */
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:10px;background:#ffffff;color:#1f1f1f;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,.25);}
+.btn-google:hover{background:#f5f5f5;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.2);}
+
+.action-note{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:16px;line-height:1.5;}
+.action-note a{color:var(--teal);}
+
+.divider-line{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:12px;color:var(--text-dim);}
+.divider-line::before,.divider-line::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.already-link{text-align:center;font-size:13px;color:var(--text-dim);margin-top:14px;}
+.already-link a{color:var(--teal);font-weight:500;}
+
+.security-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim);margin-top:16px;padding-top:14px;border-top:1px solid var(--border);justify-content:center;flex-wrap:wrap;gap:12px;}
+.security-item{display:flex;align-items:center;gap:4px;}
+
+/* benefits mini-list for paid */
+.benefit-list{list-style:none;margin-bottom:18px;}
+.benefit-list li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-mid);margin-bottom:6px;}
+.benefit-list li::before{content:'✓';color:var(--teal);font-size:12px;font-weight:700;}
+
+@media(max-width:768px){
+  .signup-grid{grid-template-columns:1fr;}
+  .signup-left{padding-top:0;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Prescope™</a>
+    <div class="nav-links">
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="signup-wrap">
+  <div class="signup-grid">
+
+    <!-- LEFT -->
+    <div class="signup-left">
+      <div class="signup-eyebrow">Get Started</div>
+      <h1 class="signup-title">Structure work.<br/>Start building.</h1>
+      <p class="signup-body">Prescope™ classifies your request first — Epic, Initiative, Feature, or Story — then decomposes it progressively. No more forcing vague requests into stories before the scope is defined.</p>
+
+      <ul class="feature-list">
+        <li>Works across ITSM, SaaS, Retail, and Healthcare</li>
+        <li>Classify first — never generate stories prematurely</li>
+        <li>Process flow diagrams with business &amp; data rules</li>
+        <li>Export to Word (.docx) and Markdown</li>
+        <li>Built-in Agile BA Toolkit with WSJF calculator</li>
+        <li>Session history — pick up where you left off</li>
+      </ul>
+
+      <div class="tier-compare">
+        <div class="tier-head">
+          <div class="th">Feature</div>
+          <div class="th">Free</div>
+          <div class="th">Paid</div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Generations / month</div>
+          <div class="tier-free">2</div>
+          <div class="tier-paid">Unlimited</div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">All 4 domains</div>
+          <div class="tier-free"><span class="t-check">✓</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Classification engine</div>
+          <div class="tier-free"><span class="t-check">✓</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Process flow diagrams</div>
+          <div class="tier-free"><span class="t-dash">–</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Word (.docx) export</div>
+          <div class="tier-free"><span class="t-dash">–</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Full BA Toolkit</div>
+          <div class="tier-free"><span class="t-dash">–</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-feat">Session history</div>
+          <div class="tier-free"><span class="t-dash">–</span></div>
+          <div class="tier-paid"><span class="t-check">✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — CARD -->
+    <div class="signup-card">
+      <div class="card-head">
+        <div class="card-title">Choose your plan</div>
+        <div class="card-sub">Paid plans take 60 seconds via Stripe. Free plan opens instantly with Google.</div>
+        <div class="plan-tabs">
+          <button class="plan-tab" onclick="switchPlan('free',this)">Free</button>
+          <button class="plan-tab teal active" onclick="switchPlan('monthly',this)">Monthly</button>
+          <button class="plan-tab" onclick="switchPlan('annual',this)">Annual</button>
+        </div>
+      </div>
+
+      <!-- ═══ FREE ═══ -->
+      <div class="plan-body" id="plan-free">
+        <div class="price-box">
+          <div>
+            <div style="font-size:11px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-bottom:4px;">Free</div>
+            <div class="price-num">$0</div>
+          </div>
+          <span class="price-badge badge-free">2 / MONTH</span>
+        </div>
+        <ul class="benefit-list">
+          <li>2 full classify + decompose sessions per month</li>
+          <li>All 4 domains — ITSM, SaaS, Retail, Healthcare</li>
+          <li>Full classification engine</li>
+          <li>Markdown export included</li>
+        </ul>
+
+        <!-- GOOGLE — PRIMARY for free -->
+        <a href="[YOUR-CLERK-SIGNIN-URL]" class="btn-google">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Continue with Google — it's free
+        </a>
+        <p class="action-note">One click · No password · No credit card · 2 sessions/month</p>
+
+        <div class="divider-line">or</div>
+        <div style="text-align:center;">
+          <button onclick="document.getElementById('email-free').style.display='block';this.style.display='none';" style="background:none;border:none;color:var(--text-dim);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:underline;">Sign up with email instead</button>
+        </div>
+        <div id="email-free" style="display:none;margin-top:12px;">
+          <div class="form-group">
+            <label class="form-label">Email address</label>
+            <input type="email" class="form-input" placeholder="you@company.com"/>
+          </div>
+          <button style="width:100%;padding:12px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:8px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;">Continue with email →</button>
+        </div>
+
+        <div class="security-row">
+          <span class="security-item">🔒 Secured by Clerk</span>
+          <span class="security-item">No card required</span>
+        </div>
+      </div>
+
+      <!-- ═══ MONTHLY ═══ -->
+      <div class="plan-body active" id="plan-monthly">
+        <div class="price-box">
+          <div>
+            <div style="font-size:11px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-bottom:4px;">Monthly</div>
+            <div class="price-num">$19<span>/mo</span></div>
+          </div>
+          <span class="price-badge badge-paid">UNLIMITED</span>
+        </div>
+        <ul class="benefit-list">
+          <li>Unlimited classifications and decompositions</li>
+          <li>Process flow diagrams with business &amp; data rules</li>
+          <li>Word (.docx) and Markdown export</li>
+          <li>Full Agile BA Toolkit with WSJF calculator</li>
+          <li>Session history across all requests</li>
+        </ul>
+
+        <!-- STRIPE — PRIMARY for paid -->
+        <a href="[YOUR-STRIPE-MONTHLY-LINK]" class="btn-primary-lg btn-teal">
+          Get Prescope™ — $19/month →
+        </a>
+        <p class="action-note">Secure checkout via Stripe · Takes 60 seconds · Cancel anytime</p>
+
+        <div class="divider-line">already subscribed?</div>
+        <a href="[YOUR-CLERK-SIGNIN-URL]" class="btn-google" style="padding:11px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </a>
+        <p class="action-note" style="margin-top:8px;">Use the same email you subscribed with</p>
+
+        <div class="security-row">
+          <span class="security-item">🔒 Payment by Stripe</span>
+          <span class="security-item">🔒 Sign-in by Clerk</span>
+          <span class="security-item">Cancel anytime</span>
+        </div>
+      </div>
+
+      <!-- ═══ ANNUAL ═══ -->
+      <div class="plan-body" id="plan-annual">
+        <div class="price-box">
+          <div>
+            <div style="font-size:11px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-bottom:4px;">Annual</div>
+            <div class="price-num">$190<span>/yr</span></div>
+          </div>
+          <span class="price-badge badge-save">SAVE $38</span>
+        </div>
+        <ul class="benefit-list">
+          <li>Everything in Monthly — billed once per year</li>
+          <li>Save $38 — equivalent to 2 months free</li>
+          <li>Best for BAs, POs, and PMs in active delivery</li>
+        </ul>
+
+        <!-- STRIPE — PRIMARY for annual -->
+        <a href="[YOUR-STRIPE-ANNUAL-LINK]" class="btn-primary-lg btn-purple">
+          Get Prescope™ — $190/year →
+        </a>
+        <p class="action-note">Secure checkout via Stripe · Billed once · Cancel anytime</p>
+
+        <div class="divider-line">already subscribed?</div>
+        <a href="[YOUR-CLERK-SIGNIN-URL]" class="btn-google" style="padding:11px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </a>
+        <p class="action-note" style="margin-top:8px;">Use the same email you subscribed with</p>
+
+        <div class="security-row">
+          <span class="security-item">🔒 Payment by Stripe</span>
+          <span class="security-item">🔒 Sign-in by Clerk</span>
+          <span class="security-item">Cancel anytime</span>
+        </div>
+      </div>
+
+    </div><!-- end card -->
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Prescope™</div>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Prescope LLC. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+function switchPlan(plan, el) {
+  document.querySelectorAll('.plan-tab').forEach(b => {
+    b.classList.remove('active');
+  });
+  el.classList.add('active');
+  document.querySelectorAll('.plan-body').forEach(b => b.classList.remove('active'));
+  document.getElementById('plan-' + plan).classList.add('active');
+}
+</script>
+</body>
+</html>

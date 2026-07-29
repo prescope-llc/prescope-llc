@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Resources — Prescope™</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.res-hero{padding:140px 24px 60px;max-width:800px;margin:0 auto;text-align:center;}
+.res-hero h1{font-size:clamp(30px,5vw,48px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:16px;}
+.res-hero p{font-size:17px;color:var(--text-mid);line-height:1.7;}
+.res-wrap{max-width:1100px;margin:0 auto;padding:0 24px 80px;}
+.res-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px;justify-content:center;}
+.filter-btn{font-size:13px;padding:7px 16px;border-radius:6px;border:1px solid var(--border-bright);color:var(--text-dim);background:none;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;}
+.filter-btn.active,.filter-btn:hover{background:var(--teal-glow);border-color:rgba(20,184,166,.4);color:var(--teal);}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s;}
+.res-card:hover{border-color:var(--border-bright);}
+.res-card-top{padding:24px 24px 16px;}
+.res-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;margin-bottom:12px;display:inline-block;}
+.res-card h3{font-size:17px;font-weight:600;margin-bottom:8px;line-height:1.3;}
+.res-card p{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.res-card-bottom{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.read-time{font-size:12px;color:var(--text-dim);}
+.read-link{font-size:13px;color:var(--teal);font-weight:500;}
+.featured-post{background:linear-gradient(135deg,rgba(20,184,166,.06),rgba(139,92,246,.06));border:1px solid rgba(20,184,166,.2);border-radius:16px;padding:36px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}
+.fp-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);background:var(--teal-glow);border:1px solid rgba(20,184,166,.25);padding:4px 10px;border-radius:4px;display:inline-block;margin-bottom:14px;}
+.fp-title{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.4px;line-height:1.2;margin-bottom:12px;}
+.fp-body{font-size:15px;color:var(--text-mid);line-height:1.7;margin-bottom:20px;}
+.fp-visual{background:var(--surface);border:1px solid var(--border-bright);border-radius:12px;padding:20px;}
+.fp-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;}
+.fp-step:last-child{margin-bottom:0;}
+.fp-num{width:22px;height:22px;border-radius:50%;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--teal);flex-shrink:0;}
+.fp-step-text{font-size:13px;color:var(--text-mid);}
+.newsletter-band{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 24px;text-align:center;margin-top:40px;}
+.newsletter-band h2{font-size:26px;font-weight:700;letter-spacing:-.4px;margin-bottom:10px;}
+.newsletter-band p{font-size:15px;color:var(--text-mid);margin-bottom:24px;}
+.nl-form{display:flex;gap:10px;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+.nl-form input{flex:1;min-width:200px;background:var(--surface2);border:1px solid var(--border-bright);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;}
+.nl-form input:focus{border-color:var(--teal);}
+.nl-btn{padding:11px 22px;background:var(--teal);color:#020617;font-weight:600;font-size:14px;border:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
+@media(max-width:768px){.featured-post{grid-template-columns:1fr;}.nl-form{flex-direction:column;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Prescope™</a>
+    <div class="nav-links">
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="about.html">About</a>
+      <a href="resources.html" style="color:var(--teal);">Resources</a>
+      <a href="signup.html" class="nav-cta">Try free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="res-hero">
+  <div class="section-label">Resources & BA Methodology</div>
+  <h1>Tools and thinking for BAs and POs who do the real work.</h1>
+  <p>Practical frameworks, field-tested patterns, and honest breakdowns of how to run better backlog sessions — from someone who's actually done it.</p>
+</div>
+
+<div class="res-wrap">
+
+  <!-- Featured post -->
+  <div class="featured-post">
+    <div>
+      <div class="fp-tag">FEATURED</div>
+      <h2 class="fp-title">The 6 Classification Levels Every BA Should Know</h2>
+      <p class="fp-body">Not every business request is a Feature. Most aren't. This is the classification framework I've used across 15 years of backlog sessions — and the same one built into Prescope.</p>
+      <a href="#post-classification" class="read-link">Read the full breakdown →</a>
+    </div>
+    <div class="fp-visual">
+      <div class="fp-step"><div class="fp-num">1</div><div class="fp-step-text"><strong>Epic</strong> — full lifecycle across multiple systems</div></div>
+      <div class="fp-step"><div class="fp-num">2</div><div class="fp-step-text"><strong>High-Level Initiative</strong> — substantial bounded outcome</div></div>
+      <div class="fp-step"><div class="fp-num">3</div><div class="fp-step-text"><strong>Initiative / Feature Group</strong> — cluster of related features</div></div>
+      <div class="fp-step"><div class="fp-num">4</div><div class="fp-step-text"><strong>Feature</strong> — single bounded capability</div></div>
+      <div class="fp-step"><div class="fp-num">5</div><div class="fp-step-text"><strong>User Story</strong> — specific user need, ready to validate</div></div>
+      <div class="fp-step"><div class="fp-num">6</div><div class="fp-step-text"><strong>Discovery Needed</strong> — too vague to classify yet</div></div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="res-filter">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">BA Methodology</button>
+    <button class="filter-btn">Agile & Scrum</button>
+    <button class="filter-btn">AI & Automation</button>
+    <button class="filter-btn">ITSM</button>
+    <button class="filter-btn">Templates</button>
+  </div>
+
+  <!-- Articles grid -->
+  <div class="res-grid">
+
+    <div class="res-card" id="post-classification">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(20,184,166,.1);color:var(--teal);border:1px solid rgba(20,184,166,.2);">BA METHODOLOGY</span>
+        <h3>The 6 Classification Levels Every BA Should Know Before Writing a Single Story</h3>
+        <p>Why jumping straight to user stories is the most common and most costly mistake in backlog work — and the classification framework that fixes it.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">5 min read</span>
+        <a href="#" class="read-link">Read →</a>
+      </div>
+    </div>
+
+    <div class="res-card">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(139,92,246,.1);color:#c4b5fd;border:1px solid rgba(139,92,246,.2);">AI & AUTOMATION</span>
+        <h3>How to Use Claude and LLM Tools in Real BA Engagements (Without Losing Control of the Output)</h3>
+        <p>AI drafts. Humans own. A practical framework for integrating LLM-based tools into discovery, requirements, and backlog work without creating new governance problems.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">7 min read</span>
+        <a href="#" class="read-link">Read →</a>
+      </div>
+    </div>
+
+    <div class="res-card">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(251,191,36,.08);color:var(--amber);border:1px solid rgba(251,191,36,.2);">ITSM</span>
+        <h3>Writing User Stories for ServiceNow and Dynatrace Integrations That Actually Pass UAT</h3>
+        <p>The specific acceptance criteria patterns, NFR categories, and dependency flags that make ITSM/observability stories defensible in refinement and testable in UAT.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">8 min read</span>
+        <a href="#" class="read-link">Read →</a>
+      </div>
+    </div>
+
+    <div class="res-card">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(20,184,166,.1);color:var(--teal);border:1px solid rgba(20,184,166,.2);">BA METHODOLOGY</span>
+        <h3>The Agile BA Thinking Framework: 8 Domains from Discovery to Measurement</h3>
+        <p>The complete BA methodology used inside Prescope — a step-by-step thinking pattern from problem identification through post-delivery measurement.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">10 min read</span>
+        <a href="#" class="read-link">Read →</a>
+      </div>
+    </div>
+
+    <div class="res-card">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(52,211,153,.08);color:var(--green);border:1px solid rgba(52,211,153,.2);">TEMPLATES</span>
+        <h3>Free WSJF Calculator and MoSCoW Prioritization Template for Agile Teams</h3>
+        <p>The exact prioritization templates embedded in Prescope's BA Toolkit — downloadable, editable, and ready for your next PI Planning or backlog refinement session.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">Free download</span>
+        <a href="#" class="read-link">Download →</a>
+      </div>
+    </div>
+
+    <div class="res-card">
+      <div class="res-card-top">
+        <span class="res-tag" style="background:rgba(139,92,246,.1);color:#c4b5fd;border:1px solid rgba(139,92,246,.2);">AGILE & SCRUM</span>
+        <h3>What WSJF Actually Means — and How to Use It Without Making It a Political Exercise</h3>
+        <p>Weighted Shortest Job First is the most powerful prioritization tool most teams misuse. Here's how to run it correctly, quickly, and without the dysfunction.</p>
+      </div>
+      <div class="res-card-bottom">
+        <span class="read-time">6 min read</span>
+        <a href="#" class="read-link">Read →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Newsletter -->
+<div class="newsletter-band">
+  <h2>BA methodology in your inbox — no fluff.</h2>
+  <p>Practical frameworks, field notes, and product updates. One email per week when there's something worth saying.</p>
+  <div class="nl-form">
+    <input type="email" placeholder="your@email.com"/>
+    <button class="nl-btn">Subscribe →</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Prescope™</div>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Prescope. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>

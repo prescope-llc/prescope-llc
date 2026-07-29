@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>About — Prescope™</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.hero-about{padding:140px 24px 80px;max-width:800px;margin:0 auto;text-align:center;}
+.hero-about h1{font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:20px;}
+.hero-about p{font-size:18px;color:var(--text-mid);line-height:1.7;}
+.story-wrap{max-width:720px;margin:0 auto;padding:0 24px 80px;}
+.story-wrap p{font-size:17px;color:var(--text-mid);line-height:1.8;margin-bottom:24px;}
+.story-wrap p strong{color:var(--text);}
+.story-wrap h2{font-size:26px;font-weight:700;letter-spacing:-.4px;margin:48px 0 16px;}
+.pull-quote{border-left:3px solid var(--teal);padding:16px 24px;margin:40px 0;font-size:20px;font-style:italic;color:var(--text-mid);line-height:1.6;}
+.founder-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;padding:36px;display:flex;gap:32px;align-items:flex-start;margin:60px 0;}
+.founder-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--teal-glow),var(--violet-dim));border:2px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;}
+.founder-info h3{font-size:20px;font-weight:700;margin-bottom:4px;}
+.founder-info .title{font-size:14px;color:var(--teal);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.founder-info p{font-size:14px;color:var(--text-mid);line-height:1.6;}
+.cred-list{list-style:none;margin-top:14px;}
+.cred-list li{font-size:13px;color:var(--text-dim);padding:4px 0;display:flex;gap:8px;}
+.cred-list li::before{content:'·';color:var(--teal);}
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:48px 0;}
+.value-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.value-icon{font-size:28px;margin-bottom:12px;}
+.value-title{font-size:15px;font-weight:600;margin-bottom:8px;}
+.value-body{font-size:13px;color:var(--text-mid);line-height:1.6;}
+.timeline{position:relative;padding-left:28px;margin:48px 0;}
+.timeline::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:32px;}
+.tl-item::before{content:'';position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--teal);border:2px solid var(--bg);}
+.tl-year{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:4px;}
+.tl-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.tl-body{font-size:13px;color:var(--text-mid);}
+.cred-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.cred-pill{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:4px;background:var(--teal-glow);border:1px solid rgba(20,184,166,.25);color:var(--teal);}
+.cta-row{text-align:center;padding:60px 0;border-top:1px solid var(--border);}
+.cta-row h2{font-size:28px;font-weight:700;letter-spacing:-.4px;margin-bottom:12px;}
+.cta-row p{font-size:16px;color:var(--text-mid);margin-bottom:28px;}
+@media(max-width:768px){.founder-card{flex-direction:column;}.values-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Prescope™</a>
+    <div class="nav-links">
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="about.html" style="color:var(--teal);">About</a>
+      <a href="signup.html" class="nav-cta">Try free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero-about">
+  <div class="section-label">About Prescope™</div>
+  <h1>Built from the work.<br/>Not around it.</h1>
+  <p>Prescope wasn't designed by engineers observing product teams from the outside. It was built by someone who has worked directly inside those teams — as a Business Analyst, Product Owner, Product Manager, and Technical Delivery Lead — across some of the most complex enterprise environments in the world.</p>
+</div>
+
+<hr class="divider"/>
+
+<div class="story-wrap">
+  <h2>The problem that wouldn't go away</h2>
+  <p>Across 15+ years of enterprise delivery — spanning financial services, insurance, retail, healthcare IT, federal government, payments, and platform engineering — one pattern repeated itself regardless of industry, team size, or methodology.</p>
+  <p><strong>Stakeholders bring messy, broad, vague requests to planning sessions. Teams decompose them into stories immediately.</strong> Then the stories get contested in refinement, debated in sprint planning, revised mid-sprint, and eventually rewritten from scratch — because the underlying request was never properly classified or scoped before the work began.</p>
+  <div class="pull-quote">"The problem isn't writing user stories. It's knowing when you're ready to write them."</div>
+  <p>The root cause isn't poor execution. It's a missing step. No one stops to ask: what kind of work request is this, really? Is this an Epic spanning multiple systems and teams? A high-level initiative that needs features defined first? Or is it actually a Feature — specific enough that stories make sense right now?</p>
+  <p>Every AI tool built for backlog and requirements work makes this mistake: they assume every input is already a Feature, and generate stories immediately. Prescope was built to fix that — not by making story generation faster, but by making the entire process more correct from the start.</p>
+
+  <h2>What makes it different</h2>
+  <p>The classify-first approach isn't a design preference. It's a methodology decision grounded in how experienced delivery professionals actually think about scope. The six classification levels — Epic, High-Level Initiative, Initiative/Feature Group, Feature, User Story, Discovery Needed — map directly to the mental model that senior BAs, POs, PMs, and Project Managers apply before they write a single requirement.</p>
+  <p>The domain contexts — ITSM, SaaS, Retail, Healthcare — aren't decorative labels. Each one carries a specific set of personas, platforms, regulatory constraints, and delivery archetypes that fundamentally change what good requirements look like. An incident lifecycle workflow in a regulated financial institution looks nothing like a checkout optimization in an ecommerce platform. Prescope knows the difference and reflects it in every output.</p>
+  <p>The process flow diagrams with business rules and data rules exist because there was a real gap: teams were generating stories without any artifact showing how the solution would actually operate at runtime. Every experienced BA knows this artifact matters. Prescope generates it automatically, without requiring a separate Visio or Lucidchart session.</p>
+
+  <h2>Who built this</h2>
+  <div class="founder-card">
+    <div class="founder-avatar">👤</div>
+    <div class="founder-info">
+      <h3>The Founder</h3>
+      <div class="title">15+ Years · BA · PO · PM · Technical Delivery · Enterprise AI</div>
+      <p>Prescope was built by a practitioner who has operated across every role this product serves — Business Analyst, Product Owner, Product Manager, Technical Business Analyst, and Technical Product Manager — in enterprise engagements ranging from global retail and payments to federal government technology modernization, healthcare IT, and AI-powered platform engineering.</p>
+      <p style="margin-top:12px;">The classify-first methodology embedded in Prescope isn't theoretical. It was developed, tested, and refined across hundreds of real planning sessions, refinement cycles, and delivery engagements — in environments where getting requirements wrong had real consequences.</p>
+      <div class="cred-pills">
+        <span class="cred-pill">Financial Services</span>
+        <span class="cred-pill">Insurance</span>
+        <span class="cred-pill">Retail</span>
+        <span class="cred-pill">Payments & Fintech</span>
+        <span class="cred-pill">Healthcare IT</span>
+        <span class="cred-pill">Federal Government</span>
+        <span class="cred-pill">ITSM & Observability</span>
+        <span class="cred-pill">Platform Engineering</span>
+        <span class="cred-pill">SAFe · PMI-ACP · CBAP</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>What we believe</h2>
+  <div class="values-grid">
+    <div class="value-card">
+      <div class="value-icon">🎯</div>
+      <div class="value-title">Classify before you generate</div>
+      <div class="value-body">Every request deserves to be understood before it's decomposed. Classification isn't a gate — it's the step that makes every downstream artifact faster, more accurate, and more defensible in refinement.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🧠</div>
+      <div class="value-title">AI drafts, humans own</div>
+      <div class="value-body">Every output is a starting point, not a final answer. The BA, PO, or PM reviewing, editing, and approving the output is the product. The tool removes the blank page — the professional provides the judgment.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🔧</div>
+      <div class="value-title">Domain context is not optional</div>
+      <div class="value-body">A NOC analyst managing incident lifecycles and a product manager optimizing a checkout funnel share the same methodology — but their deliverables, personas, and constraints are entirely different. Generic AI treats them the same. Prescope doesn't.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">📋</div>
+      <div class="value-title">Governance is not overhead</div>
+      <div class="value-body">Status tracking, process flows, business rules, and exportable artifacts aren't bureaucracy. They're what separates a backlog that gets signed off from one that gets argued about in every planning meeting.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">🔍</div>
+      <div class="value-title">Discovery before decomposition</div>
+      <div class="value-body">Some requests aren't ready to be decomposed at all. Recognizing when a stakeholder need requires discovery — not stories — is one of the most valuable things an experienced BA does. Prescope is the only tool that makes this a first-class output.</div>
+    </div>
+    <div class="value-card">
+      <div class="value-icon">📐</div>
+      <div class="value-title">Progressive over immediate</div>
+      <div class="value-body">Epic to initiative to feature to story — each level earned, not assumed. Progressive decomposition isn't just a workflow. It's a discipline that produces work artifacts teams can actually deliver against.</div>
+    </div>
+  </div>
+
+  <h2>How we got here</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-year">Early Career</div>
+      <div class="tl-title">Foundation in enterprise delivery</div>
+      <div class="tl-body">Early roles in retail technology and payments processing established the core delivery patterns — requirements elicitation, stakeholder management, iterative refinement — that became the foundation of the classify-first methodology. Operating across large-scale enterprise environments where requirements failures had direct business consequences made precision non-negotiable.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">Mid-Career</div>
+      <div class="tl-title">Cross-industry methodology refinement</div>
+      <div class="tl-body">A decade of consulting and embedded delivery roles across financial services, insurance, healthcare IT, HCM platforms, and federal government technology programs produced a repeatable pattern: teams that classified work correctly before decomposing it delivered faster, with fewer rework cycles, and with better stakeholder alignment. The pattern held across every industry and methodology — Agile, SAFe, hybrid, and waterfall alike.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">Recent Years</div>
+      <div class="tl-title">AI, AIOps, and platform engineering</div>
+      <div class="tl-body">Deep work in enterprise ITSM, observability platforms, and AI-powered automation programs at global scale validated that the classify-first problem was not Agile-specific — it existed in every delivery context where stakeholder requests needed to become governed, executable work. The intersection of AI capability and delivery methodology created the conditions for Prescope to exist.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2025</div>
+      <div class="tl-title">Prescope built and validated</div>
+      <div class="tl-body">Prescope was designed, built, and validated — a direct application of 15+ years of multi-industry delivery methodology, powered by the Anthropic Claude API. The domain contexts, classification engine, progressive decomposition logic, and process flow generator were all derived from real patterns observed across real engagements — not extrapolated from theory.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-year">2026</div>
+      <div class="tl-title">Prescope™ launches</div>
+      <div class="tl-body">Prescope LLC is formed in New York. The product launches to BAs, POs, PMs, and Project Managers across ITSM, SaaS, Retail, and Healthcare — the four domains where the classify-first gap is most acute and the cost of requirements failure is most visible. The USPTO trademark for PRESCOPE is filed. The methodology is proven. The product is ready.</div>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <h2>Try it on your next planning session.</h2>
+    <p>No account required. No credit card. See the classify-first approach applied to a real request in under two minutes.</p>
+    <a href="[YOUR-APP-URL]" class="btn-primary">Open Prescope™ →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Prescope™</div>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Prescope LLC. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>

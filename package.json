@@ -1,0 +1,12 @@
+{
+  "name": "backlog-console-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered progressive backlog decomposition tool for enterprise platform teams",
+  "engines": {
+    "node": ">=20.x"
+  },
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}

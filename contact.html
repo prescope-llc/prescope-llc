@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — Prescope™</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.contact-wrap{max-width:900px;margin:0 auto;padding:120px 24px 80px;}
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:60px;align-items:start;}
+.contact-left h1{font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-.8px;line-height:1.15;margin-bottom:16px;}
+.contact-left p{font-size:16px;color:var(--text-mid);line-height:1.7;margin-bottom:32px;}
+.contact-option{display:flex;align-items:flex-start;gap:14px;margin-bottom:24px;}
+.contact-icon{width:42px;height:42px;border-radius:10px;background:var(--teal-glow);border:1px solid rgba(20,184,166,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-opt-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.contact-opt-body{font-size:13px;color:var(--text-mid);}
+.contact-opt-link{font-size:13px;color:var(--teal);}
+.contact-card{background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;padding:32px;}
+.contact-card h2{font-size:20px;font-weight:700;margin-bottom:6px;}
+.contact-card .sub{font-size:14px;color:var(--text-mid);margin-bottom:24px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.submit-btn{width:100%;padding:14px;background:var(--teal);color:#020617;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;margin-top:4px;}
+.submit-btn:hover{background:var(--teal-dim);transform:translateY(-1px);}
+.response-note{text-align:center;font-size:12px;color:var(--text-dim);margin-top:12px;}
+.success-msg{display:none;text-align:center;padding:32px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:12px;}
+.success-msg h3{color:var(--green);font-size:20px;margin-bottom:8px;}
+.success-msg p{color:var(--text-mid);font-size:14px;}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Prescope™</a>
+    <div class="nav-links">
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="about.html">About</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="signup.html" class="nav-cta">Try free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="contact-wrap">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="section-label">Get in touch</div>
+      <h1>We'd love to hear from you.</h1>
+      <p>Whether you're an early adopter with feedback, a consultant curious about a team plan, or a BA with a question about how the tool handles a specific domain — reach out directly.</p>
+
+      <div class="contact-option">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-opt-title">Email</div>
+          <div class="contact-opt-body">For general enquiries, billing, and support.</div>
+          <a href="mailto:[YOUR-EMAIL]" class="contact-opt-link">[YOUR-EMAIL]</a>
+        </div>
+      </div>
+      <div class="contact-option">
+        <div class="contact-icon">💼</div>
+        <div>
+          <div class="contact-opt-title">LinkedIn</div>
+          <div class="contact-opt-body">Follow for BA methodology content and product updates.</div>
+          <a href="https://linkedin.com/in/timothybrown" class="contact-opt-link">linkedin.com/in/timothybrown</a>
+        </div>
+      </div>
+      <div class="contact-option">
+        <div class="contact-icon">🤝</div>
+        <div>
+          <div class="contact-opt-title">Pilot & consulting enquiries</div>
+          <div class="contact-opt-body">Running a platform, ITSM, or automation program and want a free pilot engagement? Let's talk.</div>
+          <a href="mailto:[YOUR-EMAIL]?subject=Pilot enquiry" class="contact-opt-link">Request a pilot session →</a>
+        </div>
+      </div>
+      <div class="contact-option">
+        <div class="contact-icon">⏱️</div>
+        <div>
+          <div class="contact-opt-title">Response time</div>
+          <div class="contact-opt-body">Replies within 1 business day during the early access period.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-card">
+      <h2>Send a message</h2>
+      <div class="sub">We read every message personally.</div>
+
+      <div id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First name</label>
+            <input type="text" class="form-input" placeholder="Jane"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last name</label>
+            <input type="text" class="form-input" placeholder="Smith"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="jane@company.com"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <select class="form-input">
+            <option value="" disabled selected>What's this about?</option>
+            <option>General question</option>
+            <option>Product feedback</option>
+            <option>Billing or account</option>
+            <option>Pilot or consulting enquiry</option>
+            <option>Bug report</option>
+            <option>Partnership or press</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" placeholder="Tell us what's on your mind…" style="min-height:140px;"></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitForm()">Send message →</button>
+        <p class="response-note">We'll reply to your email within 1 business day.</p>
+      </div>
+
+      <div class="success-msg" id="success">
+        <h3>✓ Message sent</h3>
+        <p>Thanks for reaching out. We'll reply to your email within 1 business day.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Prescope™</div>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" style="color:var(--teal);">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Prescope. All rights reserved.</div>
+  </div>
+</footer>
+<script>
+function submitForm(){
+  // Replace this with your actual form submission (Formspree, EmailJS, etc.)
+  // Formspree: fetch('https://formspree.io/f/YOUR_ID', {method:'POST', ...})
+  document.getElementById('contact-form').style.display='none';
+  document.getElementById('success').style.display='block';
+}
+</script>
+</body>
+</html>

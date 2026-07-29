@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/signup", "dest": "/signup.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/contact", "dest": "/contact.html" },
+    { "src": "/thankyou", "dest": "/thankyou.html" },
+    { "src": "/resources", "dest": "/resources.html" },
+    { "src": "/terms", "dest": "/terms.html" },
+    { "src": "/privacy", "dest": "/privacy.html" },
+    { "src": "/refunds", "dest": "/refunds.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
