@@ -1,3 +1,4 @@
+import { verifyToken } from '@clerk/backend';
 // /api/auth
 // Verifies a Clerk session token, returns user info + Stripe subscription status.
 // Called on app load to determine free vs paid access.
@@ -9,22 +10,40 @@ export default async function handler(req, res) {
   if (!sessionToken) return res.status(401).json({ error: 'No session token' });
 
   try {
-    // ── 1. Verify Clerk session token ──────────────────────────────────────────
-    const clerkRes = await fetch('https://api.clerk.com/v1/sessions/' + sessionToken + '/verify', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + process.env.CLERK_SECRET_KEY,
-        'Content-Type': 'application/json',
-      },
-    });
+  // — 1. Verify Clerk session token
+const claims = await verifyToken(sessionToken, {
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
 
-    if (!clerkRes.ok) {
-      return res.status(401).json({ error: 'Invalid session' });
-    }
+const userId = claims.sub;
 
-    const session = await clerkRes.json();
-    const userId   = session.user_id;
-    const email    = session.public_user_data?.identifier || '';
+if (!userId) {
+  return res.status(401).json({ error: 'Invalid session' });
+}
+
+// Retrieve the authenticated user's information from Clerk
+const userRes = await fetch(
+  `https://api.clerk.com/v1/users/${encodeURIComponent(userId)}`,
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
+if (!userRes.ok) {
+  return res.status(401).json({ error: 'Unable to retrieve user' });
+}
+
+const user = await userRes.json();
+
+const primaryEmail =
+  user.email_addresses?.find(
+    address => address.id === user.primary_email_address_id
+  ) || user.email_addresses?.[0];
+
+const email = primaryEmail?.email_address || '';
 
     // ── 2. Check Stripe subscription ──────────────────────────────────────────
     let plan = 'free'; // default
