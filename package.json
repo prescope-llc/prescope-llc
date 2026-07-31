@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "@clerk/backend": "^2.4.1",
-    "docx": "^9.6.1"
+    "docx": "9.6.1"
   }
 }
