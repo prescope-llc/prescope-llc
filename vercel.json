@@ -1,5 +1,12 @@
 {
   "version": 2,
+  "functions": {
+    "api/export-docx.js": {
+      "includeFiles": [
+        "node_modules/docx/**"
+      ]
+    }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/signup", "dest": "/signup.html" },
