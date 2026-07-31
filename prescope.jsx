@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import {
+const { useState, useEffect } = React;
+
+const {
   Sparkles, Loader2, ChevronDown, ChevronUp, ChevronRight, ChevronLeft, Copy, Check,
-  History, X, AlertTriangle, ListChecks, Trash2, HelpCircle, Map as MapIcon, ArrowLeft,
+  History, X, AlertTriangle, ListChecks, Trash2, HelpCircle, Map: MapIcon, ArrowLeft,
   Pencil, Save, XCircle, Plus, GitBranch, RefreshCw, Download, BookOpen
-} from 'lucide-react';
+} = LucideReact;
 const DOMAIN_CONFIG = {
   saas: {
     id: 'saas', label: 'SaaS / Software Product', icon: '\uD83D\uDE80',
@@ -1167,7 +1168,7 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
 }
 
 // ── Root export with auth gate ────────────────────────────────────────────
-export default function Prescope() {
+function Prescope() {
   const [authStatus, setAuthStatus] = useState('checking');
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
@@ -1256,3 +1257,5 @@ export default function Prescope() {
     />
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Prescope />);
