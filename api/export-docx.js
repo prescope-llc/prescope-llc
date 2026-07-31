@@ -1,4 +1,5 @@
 // ../../../opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/.pnpm/docx@9.6.1/node_modules/docx/dist/index.mjs
+
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
