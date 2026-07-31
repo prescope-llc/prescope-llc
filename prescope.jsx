@@ -300,12 +300,24 @@ async function callClaude(
   }
 }
 
-function errorMessage(e){
-  if(e.message==='TIMEOUT')return 'That took longer than 45 seconds. Usually temporary \u2014 try again.';
-  if(e.message==='TRUNCATED')return 'The response ran out of room. Try a narrower selection.';
-  if(e.message==='PARSE_FAILED')return 'The response came back in an unexpected format. Usually transient \u2014 try again.';
-  if(e.message==='EMPTY_RESULT')return 'No output came back \u2014 tap the item again to retry.';
-  return `Could not complete that step${e?.message?` (${e.message})`:''}.  Try again or rephrase the request.`;
+function errorMessage(e) {
+  if (e.message === 'TIMEOUT') {
+    return 'That took longer than 45 seconds. Usually temporary — try again.';
+  }
+
+  if (e.message === 'TRUNCATED') {
+    return 'The response ran out of room. Try a narrower selection.';
+  }
+
+  if (e.message === 'PARSE_FAILED') {
+    return 'The response came back in an unexpected format. Usually transient — try again.';
+  }
+
+  if (e.message === 'EMPTY_RESULT') {
+    return 'No output came back — tap the item again to retry.';
+  }
+
+  return `Could not complete that step${e?.message ? ` (${e.message})` : ''}. Try again or rephrase the request.`;
 }
 
 const uid=(p)=>`${p}-${Date.now()}-${Math.floor(Math.random()*1000)}`;
@@ -853,7 +865,7 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
             <h1 className="text-2xl font-semibold text-slate-50">Prescope™</h1>
             <div className="flex items-center gap-2 flex-wrap mt-1">
               <p className="text-sm text-slate-400">Structure work. Start building. \u2014 step by step.</p>
-              {domain()&&<button onClick={()=>setView('productSelect')} className={`mono text-[10px] px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${domain().color.pill} hover:opacity-80`}>{domain().icon} {domain().label} <span className="text-slate-500">\u00b7 change</span></button>}
+              {domain()&&<button onClick={()=>setView('productSelect')} className={`mono text-[10px] px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${domain().color.pill} hover:opacity-80`}>{domain().icon} {domain().label} <span className="text-slate-500">· change</span></button>}
             </div>
           </div>
             <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
@@ -1191,7 +1203,7 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
           <div className="flex items-center justify-between px-5 py-3 bg-slate-900 border-b border-slate-800 flex-shrink-0">
             <div className="flex items-center gap-3">
               {activeResource&&<button onClick={()=>setActiveResource(null)} className="text-slate-500 hover:text-slate-200 flex items-center gap-1 text-xs"><ArrowLeft size={14}/> Back</button>}
-              <div><div className="text-sm font-semibold text-slate-100">{activeResource?activeResource.name:'Resources & Guidelines'}</div><div className="text-xs text-slate-500">{activeResource?(activeResource.type==='original'?'Original template \u2014 read only':'Working copy \u2014 editable'):'2 templates \u00b7 your working copies'}</div></div>
+              {activeResource?(activeResource.type==='original'?'Original template — read only':'Working copy — editable'):'2 templates · your working copies'}
             </div>
             <div className="flex items-center gap-2">
               {activeResource?.type==='copy'&&(<>
@@ -1209,14 +1221,14 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
                   {[THINKING_FRAMEWORK,BA_TOOLKIT].map(t=>(
                     <div key={t.id} className="bg-slate-900 border border-slate-800 rounded-xl p-4">
                       <div className="flex items-start justify-between gap-3">
-                        <div><div className="text-sm font-medium text-slate-100">{t.title}</div><div className="text-xs text-slate-500 mt-0.5">{t.subtitle}</div><div className="mono text-xs text-slate-600 mt-1">{t.type==='framework'?`${t.domains.length} domains \u00b7 fillable text templates`:`${t.sheets.length} sheets \u00b7 editable tables`}</div></div>
+                        {t.type==='framework'?`${t.domains.length} domains · fillable text templates`:`${t.sheets.length} sheets · editable tables`}
                         <div className="flex flex-col gap-2 flex-shrink-0"><button onClick={()=>{setActiveResource({type:'original',template:t,name:t.title,content:null});setResourceActiveSheet(0);}} className="text-xs text-slate-300 border border-slate-700 hover:border-slate-500 rounded-lg px-3 py-1.5">View</button><button onClick={()=>{setNamingCopy({templateId:t.id});setCopyNameInput(`${t.title} \u2014 Copy`);}} className="text-xs font-medium bg-violet-600 hover:bg-violet-500 text-white rounded-lg px-3 py-1.5">+ Working copy</button></div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              {resourceCopies.length>0&&<div><div className="text-xs uppercase tracking-wide text-slate-500 mb-3">Your Working Copies</div><div className="space-y-2">{resourceCopies.map(c=>{const t=c.templateId===THINKING_FRAMEWORK.id?THINKING_FRAMEWORK:BA_TOOLKIT;return(<div key={c.id} className="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3"><div className="min-w-0"><div className="text-sm text-slate-200 truncate">{c.name}</div><div className="text-xs text-slate-600 mt-0.5">{t.title} \u00b7 saved {new Date(c.updatedAt).toLocaleDateString()}</div></div><div className="flex items-center gap-2 flex-shrink-0"><button onClick={()=>{setActiveResource({type:'copy',template:t,copyId:c.id,content:c.content,name:c.name});setResourceActiveSheet(0);}} className="text-xs font-medium text-teal-300 border border-teal-700 hover:bg-teal-950 rounded-lg px-3 py-1.5">Open</button><button onClick={()=>deleteResourceCopy(c.id)} className="p-1.5 text-slate-600 hover:text-red-400"><Trash2 size={14}/></button></div></div>);})}</div></div>}
+              {t.title} · saved {new Date(c.updatedAt).toLocaleDateString()}
               {resourceCopies.length===0&&<div className="text-center py-6 text-slate-600 text-xs"><BookOpen size={24} className="mx-auto mb-2 text-slate-700"/>Create a working copy to start filling it in. The original is always preserved.</div>}
             </div>
           )}
