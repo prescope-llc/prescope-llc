@@ -320,18 +320,84 @@ async function verifySession(token) {
   } catch (e) { return null; }
 }
 
-async function checkUsage(userId) {
-  try {
-    const res = await fetch('/api/usage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, action: 'check' }) });
-    return res.ok ? await res.json() : { allowed: true, remaining: FREE_LIMIT };
-  } catch (e) { return { allowed: true, remaining: FREE_LIMIT }; }
+async function getCurrentClerkToken() {
+  if (!window.Clerk) {
+    throw new Error('AUTH_REQUIRED');
+  }
+
+  await window.Clerk.load();
+
+  if (!window.Clerk.session) {
+    throw new Error('AUTH_REQUIRED');
+  }
+
+  return await window.Clerk.session.getToken();
 }
 
-async function incrementUsage(userId) {
+async function checkUsage() {
   try {
-    const res = await fetch('/api/usage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, action: 'increment' }) });
-    return res.ok ? await res.json() : { allowed: true, remaining: FREE_LIMIT - 1 };
-  } catch (e) { return { allowed: true, remaining: FREE_LIMIT - 1 }; }
+    const token = await getCurrentClerkToken();
+
+    const res = await fetch('/api/usage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        action: 'check'
+      })
+    });
+
+    if (!res.ok) {
+      return {
+        allowed: false,
+        remaining: 0
+      };
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Usage check failed:', error);
+
+    return {
+      allowed: false,
+      remaining: 0
+    };
+  }
+}
+
+async function incrementUsage() {
+  try {
+    const token = await getCurrentClerkToken();
+
+    const res = await fetch('/api/usage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        action: 'increment'
+      })
+    });
+
+    if (!res.ok) {
+      return {
+        allowed: false,
+        remaining: 0
+      };
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Usage increment failed:', error);
+
+    return {
+      allowed: false,
+      remaining: 0
+    };
+  }
 }
 
 function useGuestUsage() {
@@ -1276,7 +1342,7 @@ function Prescope() {
           return;
         }
 
-        const usage = await checkUsage(userData.userId);
+       const usage = await checkUsage();
 
         if (!cancelled) {
           setUser({
@@ -1328,7 +1394,7 @@ function Prescope() {
   async function handleGenerate() {
     if (authStatus === 'authed') {
       if (user?.plan === 'paid') return true;
-      const result = await incrementUsage(user.userId);
+      const result = await incrementUsage();
       setUser(u => ({ ...u, remaining: result.remaining ?? 0 }));
       return result.allowed !== false;
     }
