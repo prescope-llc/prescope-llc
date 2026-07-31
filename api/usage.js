@@ -7,96 +7,123 @@
 // Add KV to your Vercel project: Dashboard → Storage → Create KV Store → link to project.
 // This auto-injects KV_REST_API_URL and KV_REST_API_TOKEN env vars.
 
-const FREE_TIER_LIMIT = 2;
+import { verifyToken } from '@clerk/backend';
 
-async function kvGet(key) {
-  const res = await fetch(`${process.env.KV_REST_API_URL}/get/${key}`, {
-    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
-  });
-  const data = await res.json();
-  return data.result ?? null;
-}
+const FREE_LIMIT = 2;
+const KEY_TTL_SECONDS = 2678400;
 
-async function kvSet(key, value, expirySeconds) {
-  const url = expirySeconds
-    ? `${process.env.KV_REST_API_URL}/set/${key}/${value}?ex=${expirySeconds}`
-    : `${process.env.KV_REST_API_URL}/set/${key}/${value}`;
-  await fetch(url, {
+async function runKvCommand(command, ...args) {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+
+  if (!url || !token) {
+    throw new Error('Vercel KV is not configured');
+  }
+
+  const path = [command, ...args]
+    .map(value => encodeURIComponent(String(value)))
+    .join('/');
+
+  const response = await fetch(`${url}/${path}`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   });
+
+  const data = await response.json();
+
+  if (!response.ok || data.error) {
+    throw new Error(data.error || 'Vercel KV request failed');
+  }
+
+  return data.result;
 }
 
-async function kvIncr(key) {
-  const res = await fetch(`${process.env.KV_REST_API_URL}/incr/${key}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` },
-  });
-  const data = await res.json();
-  return data.result ?? 1;
-}
-
-function monthKey(userId) {
+function currentUsageKey(userId) {
   const now = new Date();
-  return `usage:${userId}:${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-}
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
 
-function secondsUntilEndOfMonth() {
-  const now = new Date();
-  const end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  return Math.floor((end - now) / 1000) + 60; // +60s buffer
+  return `prescope:usage:${userId}:${year}-${month}`;
 }
 
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const { userId, action } = req.body || {};
-  if (!userId) return res.status(400).json({ error: 'Missing userId' });
-
-  // Check if KV is configured
-  if (!process.env.KV_REST_API_URL) {
-    // KV not set up — allow through (better to let user proceed than block)
-    return res.status(200).json({ allowed: true, count: 0, limit: FREE_TIER_LIMIT, kvMissing: true });
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      error: 'Method not allowed'
+    });
   }
 
-  const key = monthKey(userId);
-
   try {
+    const authorization = req.headers.authorization || '';
+    const token = authorization.startsWith('Bearer ')
+      ? authorization.slice(7)
+      : '';
+
+    if (!token) {
+      return res.status(401).json({
+        error: 'Authentication required'
+      });
+    }
+
+    const session = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY
+    });
+
+    const userId = session.sub;
+
+    if (!userId) {
+      return res.status(401).json({
+        error: 'Invalid authentication session'
+      });
+    }
+
+    const action = req.body?.action;
+    const usageKey = currentUsageKey(userId);
+
     if (action === 'check') {
-      // Just check current count without incrementing
-      const count = parseInt(await kvGet(key) || '0', 10);
+      const storedCount = await runKvCommand('get', usageKey);
+      const used = Number(storedCount || 0);
+
       return res.status(200).json({
-        allowed: count < FREE_TIER_LIMIT,
-        count,
-        limit: FREE_TIER_LIMIT,
-        remaining: Math.max(0, FREE_TIER_LIMIT - count),
+        allowed: used < FREE_LIMIT,
+        used,
+        remaining: Math.max(0, FREE_LIMIT - used),
+        limit: FREE_LIMIT
       });
     }
 
     if (action === 'increment') {
-      // Increment and return new count
-      const current = parseInt(await kvGet(key) || '0', 10);
-      if (current >= FREE_TIER_LIMIT) {
-        return res.status(200).json({ allowed: false, count: current, limit: FREE_TIER_LIMIT, remaining: 0 });
+      const used = Number(
+        await runKvCommand('incr', usageKey)
+      );
+
+      if (used === 1) {
+        await runKvCommand(
+          'expire',
+          usageKey,
+          KEY_TTL_SECONDS
+        );
       }
-      const newCount = await kvIncr(key);
-      // Set expiry on first increment so key auto-clears at month end
-      if (newCount === 1) {
-        await kvSet(key, newCount, secondsUntilEndOfMonth());
-      }
+
       return res.status(200).json({
-        allowed: true,
-        count: newCount,
-        limit: FREE_TIER_LIMIT,
-        remaining: Math.max(0, FREE_TIER_LIMIT - newCount),
+        allowed: used <= FREE_LIMIT,
+        used,
+        remaining: Math.max(0, FREE_LIMIT - used),
+        limit: FREE_LIMIT
       });
     }
 
-    return res.status(400).json({ error: 'Invalid action. Use check or increment.' });
+    return res.status(400).json({
+      error: 'Invalid usage action'
+    });
+  } catch (error) {
+    console.error('Usage API error:', error);
 
-  } catch (err) {
-    console.error('Usage error:', err);
-    // On error, allow through — don't block users due to infrastructure issues
-    return res.status(200).json({ allowed: true, count: 0, limit: FREE_TIER_LIMIT, error: 'KV unavailable' });
+    return res.status(500).json({
+      error: 'Unable to check usage'
+    });
   }
 }
+
