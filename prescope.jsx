@@ -214,20 +214,90 @@ function featurePrompt(domainCtx=''){return['You are a senior Business Analyst a
 function storyRefinePrompt(domainCtx=''){return['You are a senior Business Analyst and Product Owner.',domainCtx,'','The user provided a user story. Validate it, improve the wording, add/improve acceptance criteria (Given/When/Then), flag missing info, and confirm if it is ready for refinement.','Respond with ONLY valid JSON:','{"stories":[{"id":"story-1","title":"string","storyText":"As a ... I want ... so that ... (improved)","acceptanceCriteria":["string"],"assumptions":["string"],"dependencies":["string"],"openQuestions":["string"],"readyForRefinement":true,"improvementNotes":"string"}]}'].filter(Boolean).join('\n');}
 
 function flowDiagramPrompt(domainCtx=''){return['You are a senior Business Analyst modeling the OPERATIONAL runtime process based on a feature and its user stories.',domainCtx,'','CRITICAL: NOT an implementation plan. Every step must be part of the live running process. Derive steps from Given/When/Then acceptance criteria.','Produce 5-9 steps. Each: id, type (start/process/decision/end), label (3-6 words), description (under 15 words). Decision steps include "branches" array of {label,toStepId}.','Also produce businessRules (operational rules the system enforces) and dataRules (field-level validation, mapping, required fields).','Respond with ONLY valid JSON:','{"steps":[{"id":"s1","type":"start|process|decision|end","label":"string","description":"string","branches":[{"label":"string","toStepId":"string"}]}],"businessRules":["string"],"dataRules":["string"]}'].filter(Boolean).join('\n');}
-async function callClaude(systemPrompt,userContent,maxTokens=4096,model='claude-sonnet-4-6'){
-  const controller=new AbortController();
-  const timeoutId=setTimeout(()=>controller.abort(),45000);
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({model,max_tokens:maxTokens,system:systemPrompt,messages:[{role:'user',content:userContent}]})});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error.message||'API error');
-    if(data.stop_reason==='max_tokens')throw new Error('TRUNCATED');
-    const text=(data.content||[]).map(b=>b.text||'').join('');
-    let cleaned=text.replace(/```json|```/g,'').trim();
-    const m=cleaned.match(/\{[\s\S]*\}/);if(m)cleaned=m[0];
-    try{return JSON.parse(cleaned);}catch(e){throw new Error('PARSE_FAILED');}
-  }catch(e){if(e.name==='AbortError')throw new Error('TIMEOUT');throw e;}
-  finally{clearTimeout(timeoutId);}
+async function callClaude(
+  systemPrompt,
+  userContent,
+  maxTokens = 4096,
+  model = 'claude-sonnet-4-6'
+) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+  try {
+    if (!window.Clerk) {
+      throw new Error('AUTH_REQUIRED');
+    }
+
+    await window.Clerk.load();
+
+    if (!window.Clerk.session) {
+      throw new Error('AUTH_REQUIRED');
+    }
+
+    const token = await window.Clerk.session.getToken();
+
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model,
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: [
+          {
+            role: 'user',
+            content: userContent
+          }
+        ]
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data?.error || 'API_ERROR');
+    }
+
+    if (data.stop_reason === 'max_tokens') {
+      throw new Error('TRUNCATED');
+    }
+
+    const text = (data.content || [])
+      .map(block => block.text || '')
+      .join('');
+
+    if (!text.trim()) {
+      throw new Error('EMPTY_RESULT');
+    }
+
+    let cleaned = text
+      .replace(/```json|```/g, '')
+      .trim();
+
+    const match = cleaned.match(/\{[\s\S]*\}/);
+
+    if (match) {
+      cleaned = match[0];
+    }
+
+    try {
+      return JSON.parse(cleaned);
+    } catch {
+      throw new Error('PARSE_FAILED');
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('TIMEOUT');
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 function errorMessage(e){
