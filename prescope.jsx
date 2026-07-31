@@ -1174,21 +1174,60 @@ function Prescope() {
   const [showLogin, setShowLogin] = useState(false);
   const { remaining: guestRemaining, increment: guestIncrement } = useGuestUsage();
 
-  useEffect(() => {
+    useEffect(() => {
+    let cancelled = false;
+
     (async () => {
-      const token = localStorage.getItem('bc-session-token');
-      if (token && IS_DEPLOYED) {
-        const userData = await verifySession(token);
-        if (userData) {
-          const usage = await checkUsage(userData.userId);
-          setUser({ ...userData, remaining: usage.remaining ?? FREE_LIMIT });
-          setAuthStatus('authed');
+      try {
+        if (!window.Clerk) {
+          throw new Error('Clerk did not load');
+        }
+
+        await window.Clerk.load();
+
+        const session = window.Clerk.session;
+
+        if (!session) {
+          if (!cancelled) {
+            setUser(null);
+            setAuthStatus('guest');
+          }
           return;
         }
-        localStorage.removeItem('bc-session-token');
+
+        const token = await session.getToken();
+        const userData = await verifySession(token);
+
+        if (!userData) {
+          if (!cancelled) {
+            setUser(null);
+            setAuthStatus('guest');
+          }
+          return;
+        }
+
+        const usage = await checkUsage(userData.userId);
+
+        if (!cancelled) {
+          setUser({
+            ...userData,
+            remaining: usage.remaining ?? FREE_LIMIT
+          });
+          setAuthStatus('authed');
+        }
+      } catch (error) {
+        console.error('Authentication initialization failed:', error);
+
+        if (!cancelled) {
+          setUser(null);
+          setAuthStatus('guest');
+        }
       }
-      setAuthStatus('guest');
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   async function handleSignIn() {
@@ -1203,11 +1242,17 @@ function Prescope() {
     window.location.href = `https://accounts.${window.location.hostname.split('.').slice(-2).join('.')}/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
   }
 
-  function handleSignOut() {
-    localStorage.removeItem('bc-session-token');
-    setUser(null);
-    setAuthStatus('guest');
-    setShowLogin(false);
+   async function handleSignOut() {
+    try {
+      if (window.Clerk) {
+        await window.Clerk.signOut();
+      }
+    } finally {
+      setUser(null);
+      setAuthStatus('guest');
+      setShowLogin(false);
+      window.location.href = '/';
+    }
   }
 
   async function handleGenerate() {
