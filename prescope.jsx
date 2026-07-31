@@ -214,14 +214,24 @@ function featurePrompt(domainCtx=''){return['You are a senior Business Analyst a
 function storyRefinePrompt(domainCtx=''){return['You are a senior Business Analyst and Product Owner.',domainCtx,'','The user provided a user story. Validate it, improve the wording, add/improve acceptance criteria (Given/When/Then), flag missing info, and confirm if it is ready for refinement.','Respond with ONLY valid JSON:','{"stories":[{"id":"story-1","title":"string","storyText":"As a ... I want ... so that ... (improved)","acceptanceCriteria":["string"],"assumptions":["string"],"dependencies":["string"],"openQuestions":["string"],"readyForRefinement":true,"improvementNotes":"string"}]}'].filter(Boolean).join('\n');}
 
 function flowDiagramPrompt(domainCtx=''){return['You are a senior Business Analyst modeling the OPERATIONAL runtime process based on a feature and its user stories.',domainCtx,'','CRITICAL: NOT an implementation plan. Every step must be part of the live running process. Derive steps from Given/When/Then acceptance criteria.','Produce 5-9 steps. Each: id, type (start/process/decision/end), label (3-6 words), description (under 15 words). Decision steps include "branches" array of {label,toStepId}.','Also produce businessRules (operational rules the system enforces) and dataRules (field-level validation, mapping, required fields).','Respond with ONLY valid JSON:','{"steps":[{"id":"s1","type":"start|process|decision|end","label":"string","description":"string","branches":[{"label":"string","toStepId":"string"}]}],"businessRules":["string"],"dataRules":["string"]}'].filter(Boolean).join('\n');}
+
+let activeGenerationController = null;
+let generationCancelledByUser = false;
+
 async function callClaude(
   systemPrompt,
   userContent,
   maxTokens = 4096,
   model = 'claude-sonnet-4-6'
 ) {
+  generationCancelledByUser = false;
+
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 45000);
+  activeGenerationController = controller;
+
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 120000);
 
   try {
     if (!window.Clerk) {
@@ -291,18 +301,29 @@ async function callClaude(
     }
   } catch (error) {
     if (error.name === 'AbortError') {
+      if (generationCancelledByUser) {
+        throw new Error('CANCELLED');
+      }
       throw new Error('TIMEOUT');
     }
 
     throw error;
   } finally {
     clearTimeout(timeoutId);
+    if (activeGenerationController === controller) {
+      activeGenerationController = null;
+    }
+    generationCancelledByUser = false;
   }
 }
 
 function errorMessage(e) {
+  if (e.message === 'CANCELLED') {
+    return 'Generation was cancelled. You can revise the request and try again.';
+  }
+
   if (e.message === 'TIMEOUT') {
-    return 'That took longer than 45 seconds. Usually temporary — try again.';
+    return 'That took longer than 2 minutes. Please try again with a narrower request.';
   }
 
   if (e.message === 'TRUNCATED') {
@@ -588,7 +609,26 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
 
   useEffect(()=>{if(!loading){setElapsedSeconds(0);return;}setElapsedSeconds(0);const i=setInterval(()=>setElapsedSeconds(s=>s+1),1000);return()=>clearInterval(i);},[loading]);
 
-  function loadingMessage(){if(elapsedSeconds<5)return'Working on it\u2026';if(elapsedSeconds<15)return'Still working \u2014 this is normal for detailed requests.';if(elapsedSeconds<30)return'Larger requests can take a little longer. Still going.';return'Almost there \u2014 complex requests can take up to 45 seconds.';}
+  function loadingMessage() {
+    if (elapsedSeconds < 10) return 'Analyzing the feature and business need…';
+    if (elapsedSeconds < 25) return 'Identifying user roles and workflows…';
+    if (elapsedSeconds < 45) return 'Drafting user stories…';
+    return 'Adding acceptance criteria and dependencies…';
+  }
+
+  function estimatedProgress() {
+    if (elapsedSeconds < 10) return 20;
+    if (elapsedSeconds < 25) return 45;
+    if (elapsedSeconds < 45) return 70;
+    return 90;
+  }
+
+  function cancelGeneration() {
+    if (activeGenerationController) {
+      generationCancelledByUser = true;
+      activeGenerationController.abort();
+    }
+  }
 
   useEffect(()=>{
     if(!currentHistoryId||!classification)return;
@@ -905,7 +945,35 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
           </div>
         </div>
 
-        {loading&&<div className="flex items-center gap-3 bg-teal-950 border border-teal-800 rounded-xl px-4 py-3 mb-6"><Loader2 size={18} className="animate-spin text-teal-400 flex-shrink-0"/><div className="flex-1"><div className="text-sm text-teal-200">{loadingMessage()}</div><div className="text-xs text-teal-500 mono mt-0.5">{elapsedSeconds}s elapsed</div></div></div>}
+        {loading && (
+          <div className="bg-teal-950 border border-teal-800 rounded-xl px-4 py-4 mb-6">
+            <div className="flex items-start gap-3">
+              <Loader2 size={18} className="animate-spin text-teal-400 flex-shrink-0 mt-0.5"/>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-teal-200">{loadingMessage()}</div>
+                <div className="text-xs text-teal-500 mono mt-1">{elapsedSeconds}s elapsed</div>
+                <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden mt-3">
+                  <div
+                    className="h-full bg-teal-400 rounded-full transition-all duration-1000"
+                    style={{width:`${estimatedProgress()}%`}}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-3 mt-3">
+                  <div className="text-xs text-slate-400">
+                    Please keep this page open while PreScope completes the request.
+                  </div>
+                  <button
+                    type="button"
+                    onClick={cancelGeneration}
+                    className="text-xs font-medium text-slate-300 border border-slate-600 hover:border-red-500 hover:text-red-300 rounded-lg px-3 py-1.5 flex-shrink-0"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {confirmNewRequest&&<div className="flex items-center justify-between gap-3 bg-red-950 border border-red-800 rounded-xl px-4 py-3 mb-6 flex-wrap"><span className="text-sm text-red-200">Clear the current request and all generated content?</span><div className="flex gap-2 flex-shrink-0"><button onClick={()=>{resetAll();setConfirmNewRequest(false);}} className="text-xs font-medium text-red-100 bg-red-800 hover:bg-red-700 px-3 py-1.5 rounded-lg">Clear & start new</button><button onClick={()=>setConfirmNewRequest(false)} className="text-xs text-slate-400 hover:text-slate-200 px-3 py-1.5">Cancel</button></div></div>}
 
