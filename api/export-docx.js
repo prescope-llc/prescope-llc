@@ -1,11 +1,11 @@
 // Vercel serverless function: /api/export-docx
 // Accepts the full backlog payload and returns a formatted .docx file.
 
-const {
+import {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   AlignmentType, LevelFormat, HeadingLevel, BorderStyle, WidthType,
   ShadingType, VerticalAlign, PageNumber, PageBreak,
-} = require('docx');
+} from 'docx';
 
 const PAGE_W = 12240; // 8.5in in DXA
 const CONTENT_W = 9360; // 9360 = 9360/1440 = 6.5in content area (1in margins each side)
