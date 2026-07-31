@@ -36,6 +36,32 @@
 </head>
 <body>
 <div id="root"><div class="loading">Loading Prescope™...</div></div>
+
+<script>
+  window.storage = window.storage || {
+    async get(key) {
+      return {
+        value: window.localStorage.getItem(key)
+      };
+    },
+
+    async set(key, value) {
+      window.localStorage.setItem(key, value);
+      return {
+        key,
+        value
+      };
+    },
+
+    async delete(key) {
+      window.localStorage.removeItem(key);
+      return {
+        key
+      };
+    }
+  };
+</script>
+
 <script type="text/babel" src="/prescope.jsx"></script>
 <script>
   // Register service worker for PWA
