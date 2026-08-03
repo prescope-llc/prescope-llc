@@ -2,172 +2,188 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1CX4CK5P6Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CX4CK5P6Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1CX4CK5P6Z');
+  </script>
 
-  gtag('config', 'G-1CX4CK5P6Z');
-</script>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Welcome to Prescope™</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="shared.css"/>
-<style>
-.ty-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px 40px;}
-.ty-card{max-width:600px;width:100%;text-align:center;position:relative;z-index:1;}
-.ty-icon{width:80px;height:80px;border-radius:50%;background:var(--teal-glow);border:2px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 24px;}
-.ty-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);border-radius:20px;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:18px;}
-.ty-title{font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;}
-.ty-sub{font-size:16px;color:var(--text-mid);line-height:1.7;margin-bottom:24px;}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Welcome to Prescope™</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
 
-/* Plan confirmation pill */
-.ty-plan{display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border-bright);border-radius:10px;padding:10px 20px;margin-bottom:28px;}
-.ty-plan-name{font-size:14px;font-weight:600;color:var(--text);}
-.ty-plan-price{font-size:13px;color:var(--teal);font-family:'JetBrains Mono',monospace;}
-.ty-plan-dot{color:var(--text-dim);}
+  <style>
+    .ty-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px 40px;}
+    .ty-card{max-width:600px;width:100%;text-align:center;position:relative;z-index:1;}
+    .ty-icon{width:80px;height:80px;border-radius:50%;background:var(--teal-glow);border:2px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 24px;}
+    .ty-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);border-radius:20px;padding:5px 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);margin-bottom:18px;}
+    .ty-title{font-size:clamp(28px,5vw,44px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;}
+    .ty-sub{font-size:16px;color:var(--text-mid);line-height:1.7;margin-bottom:24px;}
 
-/* Activation box — most important element */
-.activate-box{background:linear-gradient(135deg,rgba(20,184,166,.06),rgba(139,92,246,.06));border:1px solid rgba(20,184,166,.25);border-radius:14px;padding:28px;margin-bottom:24px;text-align:left;}
-.activate-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
-.activate-title{font-size:18px;font-weight:700;margin-bottom:8px;}
-.activate-body{font-size:14px;color:var(--text-mid);line-height:1.6;margin-bottom:20px;}
-.activate-note{font-size:12px;color:var(--text-dim);margin-top:10px;display:flex;align-items:center;gap:6px;}
-.activate-note::before{content:'ℹ';color:var(--teal);}
+    .ty-plan{display:inline-flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border-bright);border-radius:10px;padding:10px 20px;margin-bottom:28px;}
+    .ty-plan-name{font-size:14px;font-weight:600;color:var(--text);}
+    .ty-plan-price{font-size:13px;color:var(--teal);font-family:'JetBrains Mono',monospace;}
+    .ty-plan-dot{color:var(--text-dim);}
 
-/* Google button — large and prominent */
-.btn-google-lg{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:15px;border-radius:10px;background:#ffffff;color:#1f1f1f;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.2);}
-.btn-google-lg:hover{background:#f5f5f5;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.15);}
+    .activate-box{background:linear-gradient(135deg,rgba(20,184,166,.06),rgba(139,92,246,.06));border:1px solid rgba(20,184,166,.25);border-radius:14px;padding:28px;margin-bottom:24px;text-align:left;}
+    .activate-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;}
+    .activate-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+    .activate-body{font-size:14px;color:var(--text-mid);line-height:1.6;margin-bottom:20px;}
+    .activate-note{font-size:12px;color:var(--text-dim);margin-top:10px;display:flex;align-items:center;gap:6px;}
+    .activate-note::before{content:'ℹ';color:var(--teal);}
 
-/* Steps */
-.ty-steps{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;text-align:left;margin-bottom:20px;}
-.ty-steps-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
-.ty-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
-.ty-step:last-child{margin-bottom:0;}
-.step-num{width:24px;height:24px;border-radius:50%;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);flex-shrink:0;margin-top:1px;}
-.step-text strong{display:block;font-size:13px;color:var(--text);margin-bottom:2px;}
-.step-text span{font-size:12px;color:var(--text-mid);line-height:1.5;}
+    .btn-google-lg{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:15px;border-radius:10px;background:#fff;color:#1f1f1f;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+    .btn-google-lg:hover{background:#f5f5f5;transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.15);}
 
-.ty-links{display:flex;justify-content:center;gap:20px;font-size:13px;flex-wrap:wrap;margin-top:8px;}
-.ty-links a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
-.ty-links a:hover{color:var(--teal);}
+    .ty-steps{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;text-align:left;margin-bottom:20px;}
+    .ty-steps-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+    .ty-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+    .ty-step:last-child{margin-bottom:0;}
+    .step-num{width:24px;height:24px;border-radius:50%;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);flex-shrink:0;margin-top:1px;}
+    .step-text strong{display:block;font-size:13px;color:var(--text);margin-bottom:2px;}
+    .step-text span{font-size:12px;color:var(--text-mid);line-height:1.5;}
 
-.billing-note{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12px;color:var(--text-dim);margin-top:16px;display:flex;align-items:center;gap:8px;text-align:left;}
-.billing-note::before{content:'🔒';font-size:14px;flex-shrink:0;}
+    .ty-links{display:flex;justify-content:center;gap:20px;font-size:13px;flex-wrap:wrap;margin-top:8px;}
+    .ty-links a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
+    .ty-links a:hover{color:var(--teal);}
 
-.confetti{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0;}
-</style>
+    .billing-note{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12px;color:var(--text-dim);margin-top:16px;display:flex;align-items:center;gap:8px;text-align:left;}
+    .billing-note::before{content:'🔒';font-size:14px;flex-shrink:0;}
+    .confetti{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0;}
+  </style>
 </head>
+
 <body>
-<div class="confetti" id="confetti"></div>
+  <div class="confetti" id="confetti"></div>
 
-<nav>
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Prescope™</a>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Prescope™</a>
+    </div>
+  </nav>
+
+  <div class="ty-wrap">
+    <div class="ty-card">
+      <div class="ty-icon">🎉</div>
+      <div class="ty-badge">✓ Payment confirmed</div>
+      <h1 class="ty-title">You're in.<br/>One step left.</h1>
+      <p class="ty-sub">Your subscription is active. Now activate your Prescope™ account by signing in with Google — takes five seconds.</p>
+
+      <div class="ty-plan">
+        <div class="ty-plan-name">Prescope™ Full Access</div>
+        <div class="ty-plan-dot">·</div>
+        <div class="ty-plan-price" id="plan-price">$19/month</div>
+      </div>
+
+      <div class="activate-box">
+        <div class="activate-label">Step 1 — Activate your account</div>
+        <div class="activate-title">Sign in with Google to access Prescope™</div>
+        <div class="activate-body">Use the same email address you entered at Stripe checkout. Your subscription will be linked automatically and you'll have full access immediately.</div>
+
+        <a href="https://accounts.prescopesolutions.com/sign-in?redirect_url=https%3A%2F%2Fwww.prescopesolutions.com%2Fapp.html" class="btn-google-lg">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Activate with Google — one click
+        </a>
+
+        <div class="activate-note">Use the same email you entered at checkout for instant access</div>
+      </div>
+
+      <div class="ty-steps">
+        <div class="ty-steps-label">After you sign in</div>
+
+        <div class="ty-step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Select your domain</strong>
+            <span>ITSM, SaaS, Retail, or Healthcare — Prescope uses the right vocabulary for your industry.</span>
+          </div>
+        </div>
+
+        <div class="ty-step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Describe a real request</strong>
+            <span>Type anything from your current backlog or planning session. See the classification before anything is generated.</span>
+          </div>
+        </div>
+
+        <div class="ty-step">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <strong>Decompose step by step</strong>
+            <span>Epic → Initiative → Feature → Story. Process flows, business rules, and export to Word or Markdown.</span>
+          </div>
+        </div>
+
+        <div class="ty-step">
+          <div class="step-num">5</div>
+          <div class="step-text">
+            <strong>Install on your phone (optional)</strong>
+            <span>iPhone: Safari → Share → Add to Home Screen. Android: Chrome prompts automatically.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ty-links">
+        <a href="contact.html">Contact support</a>
+        <a href="resources.html">BA &amp; PM resources</a>
+        <a href="index.html">Homepage</a>
+      </div>
+
+      <div class="billing-note">
+        Billing managed securely by Stripe. You can cancel, pause, or update your subscription anytime from your Stripe billing portal. Questions?
+        <a href="contact.html" style="color:var(--teal);margin-left:3px;">Contact us →</a>
+      </div>
+    </div>
   </div>
-</nav>
 
-<div class="ty-wrap">
-  <div class="ty-card">
-    <div class="ty-icon">🎉</div>
-    <div class="ty-badge">✓ Payment confirmed</div>
-    <h1 class="ty-title">You're in.<br/>One step left.</h1>
-    <p class="ty-sub">Your subscription is active. Now activate your Prescope™ account by signing in with Google — takes five seconds.</p>
-
-    <div class="ty-plan">
-      <div class="ty-plan-name">Prescope™ Full Access</div>
-      <div class="ty-plan-dot">·</div>
-      <div class="ty-plan-price" id="plan-price">$19/month</div>
-    </div>
-
-    <!-- ACTIVATION — PRIMARY ACTION -->
-    <div class="activate-box">
-      <div class="activate-label">Step 1 — Activate your account</div>
-      <div class="activate-title">Sign in with Google to access Prescope™</div>
-      <div class="activate-body">Use the same email address you entered at Stripe checkout. Your subscription will be linked automatically and you'll have full access immediately.</div>
-
-      <a href="[YOUR-CLERK-SIGNIN-URL]" class="btn-google-lg">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Activate with Google — one click
-      </a>
-      <div class="activate-note">Use the same email you entered at checkout for instant access</div>
-    </div>
-
-    <!-- WHAT HAPPENS NEXT -->
-    <div class="ty-steps">
-      <div class="ty-steps-label">After you sign in</div>
-      <div class="ty-step">
-        <div class="step-num">2</div>
-        <div class="step-text">
-          <strong>Select your domain</strong>
-          <span>ITSM, SaaS, Retail, or Healthcare — Prescope uses the right vocabulary for your industry.</span>
-        </div>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Prescope™</div>
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="refunds.html">Refund Policy</a>
+        <a href="contact.html">Contact</a>
       </div>
-      <div class="ty-step">
-        <div class="step-num">3</div>
-        <div class="step-text">
-          <strong>Describe a real request</strong>
-          <span>Type anything from your current backlog or planning session. See the classification before anything is generated.</span>
-        </div>
-      </div>
-      <div class="ty-step">
-        <div class="step-num">4</div>
-        <div class="step-text">
-          <strong>Decompose step by step</strong>
-          <span>Epic → Initiative → Feature → Story. Process flows, business rules, and export to Word or Markdown.</span>
-        </div>
-      </div>
-      <div class="ty-step">
-        <div class="step-num">5</div>
-        <div class="step-text">
-          <strong>Install on your phone (optional)</strong>
-          <span>iPhone: Safari → Share → Add to Home Screen. Android: Chrome prompts automatically.</span>
-        </div>
-      </div>
+      <div class="footer-copy">© 2026 Prescope. All rights reserved.</div>
     </div>
+  </footer>
 
-    <div class="ty-links">
-      <a href="contact.html">Contact support</a>
-      <a href="resources.html">BA &amp; PM resources</a>
-      <a href="index.html">Homepage</a>
-    </div>
+  <script>
+    // Detect plan from URL parameter, for example: ?plan=annual
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get('plan');
+      const el = document.getElementById('plan-price');
+      if (plan === 'annual' && el) el.textContent = '$190/year';
+    })();
 
-    <div class="billing-note">
-      Billing managed securely by Stripe. You can cancel, pause, or update your subscription anytime from your Stripe billing portal. Questions? <a href="contact.html" style="color:var(--teal);margin-left:3px;">Contact us →</a>
-    </div>
-  </div>
-</div>
+    // Confetti
+    (function(){
+      const c = document.getElementById('confetti');
+      const colors = ['#14b8a6','#8b5cf6','#f1f5f9','#fbbf24','#34d399'];
 
-<script>
-// Detect plan from URL param e.g. ?plan=annual
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  const plan = params.get('plan');
-  const el = document.getElementById('plan-price');
-  if (plan === 'annual' && el) el.textContent = '$190/year';
-})();
+      for (let i = 0; i < 70; i++) {
+        const p = document.createElement('div');
+        const size = Math.random() * 8 + 4;
+        p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};opacity:.85;animation:fall ${Math.random()*2+1.5}s ease-in ${Math.random()*1.5}s forwards;`;
+        c.appendChild(p);
+      }
 
-// Confetti
-(function(){
-  const c = document.getElementById('confetti');
-  const colors = ['#14b8a6','#8b5cf6','#f1f5f9','#fbbf24','#34d399'];
-  for (let i = 0; i < 70; i++) {
-    const p = document.createElement('div');
-    const size = Math.random() * 8 + 4;
-    p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};opacity:.85;animation:fall ${Math.random()*2+1.5}s ease-in ${Math.random()*1.5}s forwards;`;
-    c.appendChild(p);
-  }
-  const style = document.createElement('style');
-  style.textContent = '@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}';
-  document.head.appendChild(style);
-})();
-</script>
+      const style = document.createElement('style');
+      style.textContent = '@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}';
+      document.head.appendChild(style);
+    })();
+  </script>
 </body>
 </html>
