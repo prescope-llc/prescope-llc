@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Refund Policy — Prescope™</title>
+<meta name="description" content="Refund and cancellation policy for Prescope™ AI-powered work decomposition software. Operated by Prescope LLC."/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.legal-wrap{max-width:800px;margin:0 auto;padding:120px 24px 80px;}
+.legal-header{text-align:center;margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+.legal-header h1{font-size:32px;font-weight:700;letter-spacing:-.5px;margin-bottom:8px;}
+.legal-header .meta{font-size:14px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
+.legal-header .meta span{color:var(--teal);}
+.info-box{background:var(--teal-glow);border-top:4px solid var(--teal);border-radius:0 0 8px 8px;padding:16px 20px;margin-bottom:28px;}
+.info-box .info-title{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:6px;}
+.info-box p{font-size:13px;color:var(--text-mid);line-height:1.6;margin:0;}
+.warn-box{background:rgba(234,88,12,.06);border-top:4px solid #ea580c;border-radius:0 0 8px 8px;padding:16px 20px;margin-bottom:28px;}
+.warn-box .warn-title{font-size:13px;font-weight:700;color:#ea580c;margin-bottom:6px;}
+.warn-box p{font-size:13px;color:var(--text-mid);line-height:1.6;margin:0;}
+.legal-section{margin-bottom:40px;}
+.legal-section h2{font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;font-family:'JetBrains Mono',monospace;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:20px;margin-top:40px;}
+.legal-section h3{font-size:16px;font-weight:600;color:var(--text);margin:20px 0 8px;}
+.legal-section p{font-size:15px;color:var(--text-mid);line-height:1.8;margin-bottom:14px;}
+.legal-section p strong{color:var(--text);}
+.legal-section ul{list-style:none;margin:0 0 16px 0;padding:0;}
+.legal-section ul li{font-size:14px;color:var(--text-mid);line-height:1.7;padding:4px 0 4px 20px;position:relative;}
+.legal-section ul li::before{content:'\2022';color:var(--teal);position:absolute;left:4px;}
+.legal-section ul.no-list li::before{display:none;}
+.legal-section ul.no-list li{padding-left:0;}
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);font-weight:600;flex-shrink:0;margin-right:12px;vertical-align:middle;}
+/* Quick ref two-col */
+.qr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0 32px;}
+.qr-card{border-radius:10px;padding:20px;}
+.qr-card.red{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.2);}
+.qr-card.green{background:rgba(5,150,105,.05);border:1px solid rgba(5,150,105,.2);}
+.qr-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.qr-title.red{color:#ef4444;}
+.qr-title.green{color:#10b981;}
+.qr-card ul{margin:0;}
+.qr-card ul li{font-size:13px;color:var(--text-mid);padding:3px 0 3px 16px;}
+.qr-card ul li::before{content:'\2022';position:absolute;left:4px;color:var(--text-dim);}
+/* Data table */
+.data-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:13px;}
+.data-table th{background:var(--surface2);color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.data-table td{padding:10px 12px;color:var(--text-mid);border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.data-table tr:nth-child(even) td{background:var(--surface);}
+.data-table td:first-child{color:var(--text);font-weight:500;}
+/* Steps */
+.steps{margin:16px 0 24px;}
+.step{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--teal-glow);border:1px solid rgba(20,184,166,.3);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--teal);font-weight:700;flex-shrink:0;margin-top:2px;}
+.step-body strong{display:block;font-size:14px;color:var(--text);margin-bottom:3px;}
+.step-body span{font-size:13px;color:var(--text-mid);line-height:1.6;}
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:40px;}
+.toc h3{font-size:12px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;font-family:'JetBrains Mono',monospace;margin-bottom:14px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.toc a{font-size:13px;color:var(--teal);text-decoration:none;display:flex;align-items:center;gap:6px;padding:3px 0;}
+.toc a:hover{color:var(--text);}
+.toc a span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);}
+.legal-footer-note{text-align:center;padding:32px 0;border-top:1px solid var(--border);margin-top:40px;font-size:13px;color:var(--text-dim);}
+.legal-footer-note a{color:var(--teal);}
+@media(max-width:600px){.toc-grid{grid-template-columns:1fr;}.qr-grid{grid-template-columns:1fr;}.data-table{font-size:12px;}.data-table th,.data-table td{padding:8px;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Prescope™</a>
+    <div class="nav-links">
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="signup.html" class="nav-cta">Try free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-wrap">
+
+  <div class="legal-header">
+    <div class="section-label">Legal</div>
+    <h1>Refund &amp; Cancellation Policy</h1>
+    <p class="meta">Last Updated: <span>August 2026</span> &nbsp;·&nbsp; Effective: <span>August 2026</span> &nbsp;·&nbsp; Prescope LLC</p>
+  </div>
+
+  <div class="info-box">
+    <div class="info-title">ℹ️ Industry Research — How This Policy Was Developed</div>
+    <p>This policy was informed by review of comparable AI SaaS refund policies: ChatPRD (generally non-refundable, billing errors reviewed manually), Jasper AI (7-day refund window with proactive contact required), ChatGPT Plus / Claude Pro / Gemini Advanced (no prorated refunds, access to period end), Copy.ai (5-10 day window), and Template.net AI. EU Consumer Rights Directive (14-day cooling-off period, June 2026 cancel button requirement) and FTC click-to-cancel guidance informed the cancellation provisions.</p>
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">Quick Reference</h3>
+  <p style="font-size:14px;color:var(--text-mid);margin-bottom:16px;">Read this first — the key points before the full policy.</p>
+  <div class="qr-grid">
+    <div class="qr-card red">
+      <div class="qr-title red">❌ We Do NOT Refund</div>
+      <ul>
+        <li>Forgetting to cancel before renewal</li>
+        <li>Not using the Service after subscribing</li>
+        <li>Changing your mind after subscribing</li>
+        <li>Partial months on monthly cancellation</li>
+        <li>Annual plans cancelled mid-year (except EU law)</li>
+        <li>Dissatisfaction with AI-generated outputs</li>
+        <li>Renewal charges where notice was provided</li>
+      </ul>
+    </div>
+    <div class="qr-card green">
+      <div class="qr-title green">✅ We DO Refund or Credit</div>
+      <ul>
+        <li>Verified duplicate / double charges</li>
+        <li>Billing errors (wrong amount charged)</li>
+        <li>Service not delivered due to our error (&gt;72 hrs)</li>
+        <li>EU/EEA users within 14-day withdrawal window</li>
+        <li>Unauthorized / fraudulent charges</li>
+        <li>Exceptional discretionary review (rare)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-title">⚠️ Try before you subscribe</div>
+    <p>Prescope™ offers 2 free sessions per month on the free tier — no credit card required. We strongly recommend using the free tier before subscribing to a paid plan. Subscribing indicates your acceptance of this refund policy.</p>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h3>Table of Contents</h3>
+    <div class="toc-grid">
+      <a href="#r1"><span>01</span> General Refund Policy</a>
+      <a href="#r2"><span>02</span> Subscription Plans &amp; Billing</a>
+      <a href="#r3"><span>03</span> When Refunds Are Available</a>
+      <a href="#r4"><span>04</span> What We Do Not Refund</a>
+      <a href="#r5"><span>05</span> How to Cancel</a>
+      <a href="#r6"><span>06</span> How to Request a Refund</a>
+      <a href="#r7"><span>07</span> Chargebacks</a>
+      <a href="#r8"><span>08</span> Competitive Comparison</a>
+      <a href="#r9"><span>09</span> Policy Updates</a>
+      <a href="#r10"><span>10</span> Contact</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="legal-section" id="r1">
+    <h2><span class="section-num">1</span>General Refund Policy</h2>
+    <p><strong>Prescope LLC operates a generally non-refundable subscription model, consistent with industry standard practices for AI-powered SaaS products.</strong> This is consistent with the refund policies of comparable products including ChatPRD, ChatGPT Plus, Claude Pro, and Gemini Advanced.</p>
+    <p>The Service provides immediate access to AI-powered features upon subscription. Because you have access to the full Service the moment your subscription is processed — and because we incur real infrastructure costs (Anthropic API calls, Vercel hosting, Clerk authentication) regardless of whether you use the Service — refunds are not offered for standard subscriptions except in the specific circumstances listed in Section 3.</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="legal-section" id="r2">
+    <h2><span class="section-num">2</span>Subscription Plans and Billing</h2>
+
+    <h3>2.1 Monthly Plan — $19.00/month</h3>
+    <p>Monthly subscriptions are billed in advance on a monthly recurring basis through Stripe. Your billing date is the date of your initial subscription. If you subscribe on the 15th, your next billing date is the 15th of the following month.</p>
+
+    <h3>2.2 Annual Plan — $190.00/year</h3>
+    <p>Annual subscriptions are billed once per year in advance. The annual plan saves $38 compared to 12 months of monthly billing. Annual plans renew automatically on the anniversary of your subscription date unless canceled before the renewal date.</p>
+
+    <h3>2.3 Automatic Renewal</h3>
+    <p><strong>Both monthly and annual plans renew automatically.</strong> You will receive an email reminder from Stripe before annual plan renewal. To prevent renewal, cancel your subscription through your Stripe billing portal before your renewal date. We recommend canceling at least 5 days before your renewal date — payment processors may initiate charges up to 72 hours before the renewal date.</p>
+
+    <h3>2.4 Free Tier</h3>
+    <p>The free tier (2 sessions/month with Google Sign-In) does not involve any payment and is not subject to this refund policy. No credit card is required for the free tier.</p>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="legal-section" id="r3">
+    <h2><span class="section-num">3</span>When Refunds Are Available</h2>
+    <p>Prescope LLC will issue refunds or account credits in the following specific circumstances:</p>
+
+    <h3>3.1 Duplicate or Double Charges</h3>
+    <p>If your payment method was charged twice for the same subscription period, we will refund the duplicate amount in full. Email <a href="mailto:info@prescopesolutions.com" style="color:var(--teal);">info@prescopesolutions.com</a> within 30 days of the duplicate charge with your account email, charge date, and amount. We will verify through Stripe and process the refund within 5 business days.</p>
+
+    <h3>3.2 Billing Errors</h3>
+    <p>If you were charged an incorrect amount due to a billing error on our part (not a plan change you initiated), we will refund the difference. Common examples:</p>
+    <ul>
+      <li>Charged the annual rate when you subscribed to monthly (or vice versa)</li>
+      <li>Charged after a confirmed cancellation was processed</li>
+      <li>System error resulting in an incorrect charge amount</li>
+    </ul>
+
+    <h3>3.3 Service Not Delivered</h3>
+    <p>If a verified technical failure on our part prevented you from accessing any paid features of the Service for more than 72 consecutive hours, you may request a prorated credit for the affected period. This does not apply to planned maintenance, Anthropic API outages or third-party service interruptions beyond our control, or issues caused by your browser, device, or internet connection.</p>
+
+    <h3>3.4 Unauthorized Charges</h3>
+    <p>If your payment method was charged without your authorization, contact us immediately at <a href="mailto:info@prescopesolutions.com" style="color:var(--teal);">info@prescopesolutions.com</a> and contact your bank or card issuer. We will cooperate with fraud investigations and process refunds for verified unauthorized charges.</p>
+
+    <h3>3.5 EU / EEA Users — 14-Day Right of Withdrawal</h3>
+    <p>If you are located in the European Union or European Economic Area, you have a <strong>14-day right of withdrawal</strong> from the date of your subscription under the EU Consumer Rights Directive. You may cancel your subscription and receive a full refund within 14 days of subscribing, <strong>unless you have already used the Service</strong> (generated AI outputs, accessed paid features, or exported content).</p>
+    <p>If you expressly requested immediate access to the Service at subscription and have used paid features, your right of withdrawal is waived for the portion of the service consumed, and we may deduct a pro-rata amount for usage before the refund date.</p>
+    <p>To exercise your EU right of withdrawal, email <a href="mailto:info@prescopesolutions.com" style="color:var(--teal);">info@prescopesolutions.com</a> within 14 days of subscribing with the subject line <strong>"EU Right of Withdrawal"</strong> and your subscription details. We will process your request within 14 days.</p>
+    <p>From June 2026, consistent with EU Directive (EU) 2023/2673 requirements, you may also cancel through your Stripe billing portal, which includes a cancellation function that satisfies the EU cancel button requirement.</p>
+
+    <h3>3.6 Discretionary Review</h3>
+    <p>In exceptional circumstances not covered above, we may — at our sole discretion — review refund requests on a case-by-case basis. Submitting a request does not guarantee a refund will be issued. Discretionary reviews are rare and should not be treated as a standard or expected refund path.</p>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="legal-section" id="r4">
+    <h2><span class="section-num">4</span>What We Do Not Refund</h2>
+    <p><strong>The following situations are explicitly not eligible for refunds</strong>, consistent with industry standard AI SaaS refund policies (ChatPRD, ChatGPT Plus, Claude Pro, Gemini Advanced):</p>
+    <ul>
+      <li>Forgetting to cancel your subscription before a renewal date</li>
+      <li>Not using the Service after subscribing — access is provided regardless of usage</li>
+      <li>Changing your mind after subscribing and using paid features</li>
+      <li>Unused portion of a monthly billing period after cancellation</li>
+      <li>Annual plan mid-year cancellation (except for EU/EEA users exercising statutory rights)</li>
+      <li>Dissatisfaction with AI-generated outputs — AI outputs are probabilistic and not guaranteed</li>
+      <li>Subscription renewal charges where we provided advance renewal notice</li>
+      <li>Subscription charges resulting from failure to update payment method</li>
+      <li>Charges incurred during a period when your account was suspended for Terms of Service violations</li>
+    </ul>
+    <div class="info-box">
+      <div class="info-title">ℹ️ Why we structure it this way</div>
+      <p>Prescope LLC operates as a lean single-product company. Our infrastructure costs (Anthropic API, Vercel hosting, Stripe processing) are incurred immediately when you subscribe, regardless of usage. A liberal refund policy would make the $19/month subscription unsustainable. We offset this by providing a genuine free tier (2 sessions/month) so you can evaluate the product before committing.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="legal-section" id="r5">
+    <h2><span class="section-num">5</span>How to Cancel Your Subscription</h2>
+    <p>You may cancel your Prescope™ subscription at any time. Cancellation stops future charges — it does not entitle you to a refund for the current billing period (except for EU/EEA users within the 14-day window).</p>
+
+    <h3>5.1 Steps to Cancel</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Go to your Stripe billing portal</strong>
+          <span>Access via the link in your subscription confirmation email or your Prescope account settings.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Click "Cancel subscription" or "Cancel plan"</strong>
+          <span>Then confirm cancellation when prompted.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Receive confirmation email from Stripe</strong>
+          <span>Save this email as proof of cancellation. Your paid access continues to the end of the current billing period.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Account reverts to free tier</strong>
+          <span>After your paid period ends, you keep your account with 2 sessions/month. Your session history remains accessible.</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>5.2 What Happens After Cancellation</h3>
+    <ul>
+      <li>Access continues to the end of your paid billing period — you keep full access until the last day</li>
+      <li>Your account becomes a free tier account (2 sessions/month) after your paid period ends</li>
+      <li>Your session history remains accessible on the free tier</li>
+      <li>You will not be charged again after cancellation</li>
+      <li>You may resubscribe at any time at the current subscription price</li>
+    </ul>
+
+    <h3>5.3 Timing Your Cancellation</h3>
+    <p><strong>Cancel at least 5 business days before your renewal date.</strong> Payment processors may initiate the renewal charge up to 72 hours before your billing date. Canceling the day before renewal may not prevent the next charge from processing. We cannot reverse a charge once it has been initiated by Stripe, even if you cancel the same day.</p>
+
+    <h3>5.4 Annual Plan Cancellation</h3>
+    <p>If you cancel an annual plan mid-year: you retain access until your annual renewal date and are not charged again. No refund is issued for the unused portion of the annual period (except for EU/EEA users within 14 days of subscription or renewal). To avoid annual renewal charges, cancel at least 5 days before your annual renewal date.</p>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="legal-section" id="r6">
+    <h2><span class="section-num">6</span>How to Request a Refund</h2>
+    <p>To request a refund for an eligible situation (Section 3):</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Email us at info@prescopesolutions.com</strong>
+          <span>Subject line: <strong>"Refund Request"</strong></span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Include the following information</strong>
+          <span>Your full name, email address associated with your Prescope account, date of the charge, amount charged, reason for the refund request, and any supporting documentation (e.g., screenshot of duplicate charge, Stripe receipt).</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Receive our response</strong>
+          <span>We will acknowledge your request within 2 business days and respond with a decision within 7 business days.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Refund processed if approved</strong>
+          <span>Refunds are issued to the original payment method only and appear on your statement within 5-10 business days depending on your bank or card issuer.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="legal-section" id="r7">
+    <h2><span class="section-num">7</span>Chargebacks</h2>
+    <p><strong>We strongly encourage you to contact us before filing a chargeback with your bank or card issuer.</strong> Chargebacks are appropriate for unauthorized charges (fraud) but not for subscription charges you authorized and received. Filing a chargeback for an authorized subscription charge constitutes "friendly fraud" and may result in:</p>
+    <ul>
+      <li>Permanent suspension of your Prescope account</li>
+      <li>Being blacklisted from future subscriptions</li>
+      <li>Recovery action by Stripe on our behalf</li>
+    </ul>
+    <p>If you have a legitimate concern, email <a href="mailto:info@prescopesolutions.com" style="color:var(--teal);">info@prescopesolutions.com</a> first. We resolve genuine billing errors promptly and fairly.</p>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="legal-section" id="r8">
+    <h2><span class="section-num">8</span>Competitive Comparison</h2>
+    <p>For reference, here is how Prescope's refund policy compares to comparable AI SaaS products:</p>
+    <table class="data-table">
+      <thead>
+        <tr><th>Product</th><th>Refund Policy</th><th>Window</th><th>Key Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ChatPRD</td><td>Generally non-refundable</td><td>None standard</td><td>Billing errors reviewed manually at discretion</td></tr>
+        <tr><td>ChatGPT Plus</td><td>No prorated refunds</td><td>None standard</td><td>Access to period end; no exceptions for unused time</td></tr>
+        <tr><td>Claude Pro</td><td>No prorated refunds</td><td>None standard</td><td>Same as ChatGPT Plus model</td></tr>
+        <tr><td>Gemini Advanced</td><td>No prorated refunds</td><td>None standard</td><td>Access to period end; Google-standard policy</td></tr>
+        <tr><td>Jasper AI</td><td>7-day window</td><td>7 days</td><td>Must contact support proactively; not automatic</td></tr>
+        <tr><td>Copy.ai</td><td>Limited window</td><td>5-10 days</td><td>Consumer-friendly but still discretionary</td></tr>
+        <tr><td><strong>Prescope™</strong></td><td><strong>Non-refundable + specific exceptions</strong></td><td><strong>EU 14-day statutory; billing errors</strong></td><td><strong>Free tier available; contact required for exceptions</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 9 -->
+  <div class="legal-section" id="r9">
+    <h2><span class="section-num">9</span>Policy Updates</h2>
+    <p>We may update this Refund and Cancellation Policy from time to time to reflect changes in applicable law (including EU Consumer Rights Directive amendments), Stripe payment processing policies, or our business practices. Material changes will be communicated via email to registered users at least 30 days before taking effect. Continued use of the Service after the effective date constitutes acceptance of the updated policy.</p>
+  </div>
+
+  <!-- SECTION 10 -->
+  <div class="legal-section" id="r10">
+    <h2><span class="section-num">10</span>Contact</h2>
+    <p>For all refund and billing inquiries:</p>
+    <ul class="no-list">
+      <li><strong>Company:</strong> Prescope LLC &nbsp;·&nbsp; Refund and Billing Inquiries</li>
+      <li><strong>Email:</strong> <a href="mailto:info@prescopesolutions.com" style="color:var(--teal);">info@prescopesolutions.com</a></li>
+      <li><strong>Address:</strong> Tuxedo Park, Orange County, New York 10987</li>
+      <li><strong>Subject line:</strong> "Refund Request"</li>
+      <li><strong>Acknowledgement:</strong> Within 2 business days</li>
+      <li><strong>Decision:</strong> Within 7 business days</li>
+    </ul>
+  </div>
+
+  <div class="legal-footer-note">
+    <p>© 2026 Prescope LLC. All rights reserved. Prescope™ is a trademark of Prescope LLC (USPTO Class 042).</p>
+    <p style="margin-top:8px;"><em>This policy was last updated August 2026 and is reviewed quarterly.</em></p>
+    <p style="margin-top:8px;">
+      <a href="/terms.html">Terms of Service</a> &nbsp;·&nbsp;
+      <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="/contact.html">Contact Us</a>
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Prescope™</div>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="refunds.html" style="color:var(--teal);">Refunds</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Prescope LLC. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>
