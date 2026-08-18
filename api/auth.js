@@ -1,84 +1,128 @@
+// /api/usage
+// Tracks and enforces free tier generation limits using Vercel KV.
+// Free tier: 3 generations per calendar month per user.
+// Paid users bypass this entirely.
+
+// Vercel KV is a Redis-compatible key-value store.
+// Add KV to your Vercel project: Dashboard → Storage → Create KV Store → link to project.
+// This auto-injects KV_REST_API_URL and KV_REST_API_TOKEN env vars.
+
 import { verifyToken } from '@clerk/backend';
-// /api/auth
-// Verifies a Clerk session token, returns user info + Stripe subscription status.
-// Called on app load to determine free vs paid access.
+
+const FREE_LIMIT = 2;
+const KEY_TTL_SECONDS = 2678400;
+
+async function runKvCommand(command, ...args) {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+
+  if (!url || !token) {
+    throw new Error('Vercel KV is not configured');
+  }
+
+  const path = [command, ...args]
+    .map(value => encodeURIComponent(String(value)))
+    .join('/');
+
+  const response = await fetch(`${url}/${path}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || data.error) {
+    throw new Error(data.error || 'Vercel KV request failed');
+  }
+
+  return data.result;
+}
+
+function currentUsageKey(userId) {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+
+  return `prescope:usage:${userId}:${year}-${month}`;
+}
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
-  const { sessionToken } = req.body || {};
-  if (!sessionToken) return res.status(401).json({ error: 'No session token' });
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      error: 'Method not allowed'
+    });
+  }
 
   try {
-  // — 1. Verify Clerk session token
-const claims = await verifyToken(sessionToken, {
-  secretKey: process.env.CLERK_SECRET_KEY,
-});
+    const authorization = req.headers.authorization || '';
+    const token = authorization.startsWith('Bearer ')
+      ? authorization.slice(7)
+      : '';
 
-const userId = claims.sub;
-
-if (!userId) {
-  return res.status(401).json({ error: 'Invalid session' });
-}
-
-// Retrieve the authenticated user's information from Clerk
-const userRes = await fetch(
-  `https://api.clerk.com/v1/users/${encodeURIComponent(userId)}`,
-  {
-    headers: {
-      Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-      'Content-Type': 'application/json',
-    },
-  }
-);
-
-if (!userRes.ok) {
-  return res.status(401).json({ error: 'Unable to retrieve user' });
-}
-
-const user = await userRes.json();
-
-const primaryEmail =
-  user.email_addresses?.find(
-    address => address.id === user.primary_email_address_id
-  ) || user.email_addresses?.[0];
-
-const email = primaryEmail?.email_address || '';
-
-    // ── 2. Check Stripe subscription ──────────────────────────────────────────
-    let plan = 'free'; // default
-
-    if (process.env.STRIPE_SECRET_KEY && email) {
-      try {
-        // Search for customer by email
-        const custRes = await fetch(
-          `https://api.stripe.com/v1/customers?email=${encodeURIComponent(email)}&limit=1`,
-          { headers: { 'Authorization': 'Bearer ' + process.env.STRIPE_SECRET_KEY } }
-        );
-        const custData = await custRes.json();
-        const customer = custData.data?.[0];
-
-        if (customer) {
-          // Check for active subscription
-          const subRes = await fetch(
-            `https://api.stripe.com/v1/subscriptions?customer=${customer.id}&status=active&limit=1`,
-            { headers: { 'Authorization': 'Bearer ' + process.env.STRIPE_SECRET_KEY } }
-          );
-          const subData = await subRes.json();
-          if (subData.data?.length > 0) {
-            plan = 'paid';
-          }
-        }
-      } catch (stripeErr) {
-        // If Stripe check fails, default to free — don't block the user
-        console.error('Stripe check failed:', stripeErr.message);
-      }
+    if (!token) {
+      return res.status(401).json({
+        error: 'Authentication required'
+      });
     }
 
-    return res.status(200).json({ userId, email, plan });
+    const session = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY
+    });
 
-  } catch (err) {
-    console.error('Auth error:', err);
-    return res.status(401).json({ error: 'Authentication failed' });
+    const userId = session.sub;
+
+    if (!userId) {
+      return res.status(401).json({
+        error: 'Invalid authentication session'
+      });
+    }
+
+    const action = req.body?.action;
+    const usageKey = currentUsageKey(userId);
+
+    if (action === 'check') {
+      const storedCount = await runKvCommand('get', usageKey);
+      const used = Number(storedCount || 0);
+
+      return res.status(200).json({
+        allowed: used < FREE_LIMIT,
+        used,
+        remaining: Math.max(0, FREE_LIMIT - used),
+        limit: FREE_LIMIT
+      });
+    }
+
+    if (action === 'increment') {
+      const used = Number(
+        await runKvCommand('incr', usageKey)
+      );
+
+      if (used === 1) {
+        await runKvCommand(
+          'expire',
+          usageKey,
+          KEY_TTL_SECONDS
+        );
+      }
+
+      return res.status(200).json({
+        allowed: used <= FREE_LIMIT,
+        used,
+        remaining: Math.max(0, FREE_LIMIT - used),
+        limit: FREE_LIMIT
+      });
+    }
+
+    return res.status(400).json({
+      error: 'Invalid usage action'
+    });
+  } catch (error) {
+    console.error('Usage API error:', error);
+
+    return res.status(500).json({
+      error: 'Unable to check usage'
+    });
   }
 }
