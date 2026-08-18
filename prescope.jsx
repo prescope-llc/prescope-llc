@@ -909,7 +909,7 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
           <div>
             <h1 className="text-2xl font-semibold text-slate-50">Prescope™</h1>
             <div className="flex items-center gap-2 flex-wrap mt-1">
-              <p className="text-sm text-slate-400">Structure work. Start building. \u2014 step by step.</p>
+              <p className="text-sm text-slate-400">Structure work. Start building. — step by step.</p>
               {domain()&&<button onClick={()=>setView('productSelect')} className={`mono text-[10px] px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${domain().color.pill} hover:opacity-80`}>{domain().icon} {domain().label} <span className="text-slate-500">· change</span></button>}
             </div>
           </div>
@@ -1491,8 +1491,30 @@ function Prescope() {
       setShowLogin(false);
       return;
     }
-    // Production: redirect to Clerk hosted sign-in
-    window.location.href = `https://accounts.${window.location.hostname.split('.').slice(-2).join('.')}/sign-in?redirect_url=${encodeURIComponent(window.location.href)}`;
+
+    try {
+      if (!window.Clerk) {
+        throw new Error('Clerk did not load');
+      }
+
+      await window.Clerk.load();
+
+      const appUrl = `${window.location.origin}/app.html`;
+
+      // Keep authentication inside Prescope. Popup OAuth avoids relying on
+      // the Account Portal-to-www cross-subdomain session handoff.
+      window.Clerk.openSignIn({
+        withSignUp: true,
+        oauthFlow: 'popup',
+        forceRedirectUrl: appUrl,
+        fallbackRedirectUrl: appUrl,
+        signUpForceRedirectUrl: appUrl,
+        signUpFallbackRedirectUrl: appUrl
+      });
+    } catch (error) {
+      console.error('Unable to open Clerk sign-in:', error);
+      window.alert('Prescope could not open sign-in. Please refresh the page and try again.');
+    }
   }
 
    async function handleSignOut() {
