@@ -1,11 +1,8 @@
 // /api/usage
-// Tracks and enforces free tier generation limits using Vercel KV.
-// Free tier: 3 generations per calendar month per user.
-// Paid users bypass this entirely.
-
-// Vercel KV is a Redis-compatible key-value store.
-// Add KV to your Vercel project: Dashboard → Storage → Create KV Store → link to project.
-// This auto-injects KV_REST_API_URL and KV_REST_API_TOKEN env vars.
+// Enforces Prescope access:
+// - Paid users: unlimited
+// - Active 14-day trial users: unlimited
+// - Free users: 2 generations per calendar month
 
 import { verifyToken } from '@clerk/backend';
 
@@ -34,18 +31,76 @@ async function runKvCommand(command, ...args) {
   const data = await response.json();
 
   if (!response.ok || data.error) {
-    throw new Error(data.error || 'Vercel KV request failed');
+    throw new Error(
+      data.error || 'Vercel KV request failed'
+    );
   }
 
   return data.result;
 }
 
+function entitlementKey(userId) {
+  return `prescope:entitlement:${userId}`;
+}
+
 function currentUsageKey(userId) {
   const now = new Date();
   const year = now.getUTCFullYear();
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+  const month = String(
+    now.getUTCMonth() + 1
+  ).padStart(2, '0');
 
   return `prescope:usage:${userId}:${year}-${month}`;
+}
+
+async function getEntitlement(userId) {
+  const stored = await runKvCommand(
+    'get',
+    entitlementKey(userId)
+  );
+
+  if (!stored) {
+    return null;
+  }
+
+  try {
+    return typeof stored === 'string'
+      ? JSON.parse(stored)
+      : stored;
+  } catch {
+    return null;
+  }
+}
+
+function evaluateStoredTrial(record) {
+  const trialEndsAt = record?.trialEndsAt
+    ? new Date(record.trialEndsAt).getTime()
+    : 0;
+
+  const remainingMilliseconds =
+    trialEndsAt - Date.now();
+
+  if (
+    record?.trialClaimed &&
+    trialEndsAt > 0 &&
+    remainingMilliseconds > 0
+  ) {
+    return {
+      active: true,
+      daysRemaining: Math.max(
+        1,
+        Math.ceil(
+          remainingMilliseconds /
+            (24 * 60 * 60 * 1000)
+        )
+      )
+    };
+  }
+
+  return {
+    active: false,
+    daysRemaining: 0
+  };
 }
 
 export default async function handler(req, res) {
@@ -56,8 +111,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const authorization = req.headers.authorization || '';
-    const token = authorization.startsWith('Bearer ')
+    const authorization =
+      req.headers.authorization || '';
+
+    const token = authorization.startsWith(
+      'Bearer '
+    )
       ? authorization.slice(7)
       : '';
 
@@ -80,17 +139,50 @@ export default async function handler(req, res) {
     }
 
     const action = req.body?.action;
+    const record = await getEntitlement(userId);
+    const trial = evaluateStoredTrial(record);
+
+    /*
+     * Paid status is returned by /api/auth.
+     * Trial status is also independently checked here
+     * using its server-side expiration date.
+     */
+    if (trial.active) {
+      return res.status(200).json({
+        allowed: true,
+        plan: 'trial',
+        hasFullAccess: true,
+        used: 0,
+        remaining: null,
+        limit: null,
+        trialEndsAt: record.trialEndsAt,
+        trialDaysRemaining: trial.daysRemaining
+      });
+    }
+
     const usageKey = currentUsageKey(userId);
 
     if (action === 'check') {
-      const storedCount = await runKvCommand('get', usageKey);
+      const storedCount = await runKvCommand(
+        'get',
+        usageKey
+      );
+
       const used = Number(storedCount || 0);
 
       return res.status(200).json({
         allowed: used < FREE_LIMIT,
+        plan: 'free',
+        hasFullAccess: false,
         used,
-        remaining: Math.max(0, FREE_LIMIT - used),
-        limit: FREE_LIMIT
+        remaining: Math.max(
+          0,
+          FREE_LIMIT - used
+        ),
+        limit: FREE_LIMIT,
+        trialEndsAt:
+          record?.trialEndsAt || null,
+        trialDaysRemaining: 0
       });
     }
 
@@ -109,9 +201,17 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         allowed: used <= FREE_LIMIT,
+        plan: 'free',
+        hasFullAccess: false,
         used,
-        remaining: Math.max(0, FREE_LIMIT - used),
-        limit: FREE_LIMIT
+        remaining: Math.max(
+          0,
+          FREE_LIMIT - used
+        ),
+        limit: FREE_LIMIT,
+        trialEndsAt:
+          record?.trialEndsAt || null,
+        trialDaysRemaining: 0
       });
     }
 
@@ -126,4 +226,3 @@ export default async function handler(req, res) {
     });
   }
 }
-
