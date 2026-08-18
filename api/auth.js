@@ -1,16 +1,10 @@
-// /api/usage
-// Tracks and enforces free tier generation limits using Vercel KV.
-// Free tier: 3 generations per calendar month per user.
-// Paid users bypass this entirely.
-
-// Vercel KV is a Redis-compatible key-value store.
-// Add KV to your Vercel project: Dashboard → Storage → Create KV Store → link to project.
-// This auto-injects KV_REST_API_URL and KV_REST_API_TOKEN env vars.
-
 import { verifyToken } from '@clerk/backend';
 
-const FREE_LIMIT = 2;
-const KEY_TTL_SECONDS = 2678400;
+// /api/auth
+// Verifies Clerk, checks Stripe, and creates/evaluates the user's
+// one-time 14-day Prescope reverse trial. Replace api/auth.js with this file.
+
+const TRIAL_LENGTH_MS = 14 * 24 * 60 * 60 * 1000;
 
 async function runKvCommand(command, ...args) {
   const url = process.env.KV_REST_API_URL;
@@ -26,9 +20,7 @@ async function runKvCommand(command, ...args) {
 
   const response = await fetch(`${url}/${path}`, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    headers: { Authorization: `Bearer ${token}` }
   });
 
   const data = await response.json();
@@ -40,89 +32,222 @@ async function runKvCommand(command, ...args) {
   return data.result;
 }
 
-function currentUsageKey(userId) {
-  const now = new Date();
-  const year = now.getUTCFullYear();
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+function entitlementKey(userId) {
+  return `prescope:entitlement:${userId}`;
+}
 
-  return `prescope:usage:${userId}:${year}-${month}`;
+async function getClerkUser(userId) {
+  const response = await fetch(
+    `https://api.clerk.com/v1/users/${encodeURIComponent(userId)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Unable to retrieve Clerk user (${response.status})`);
+  }
+
+  return response.json();
+}
+
+function getPrimaryEmail(user) {
+  const primaryEmail =
+    user.email_addresses?.find(
+      address => address.id === user.primary_email_address_id
+    ) || user.email_addresses?.[0];
+
+  return primaryEmail?.email_address || '';
+}
+
+async function hasActiveStripeSubscription(email) {
+  if (!process.env.STRIPE_SECRET_KEY || !email) {
+    return false;
+  }
+
+  try {
+    const customerResponse = await fetch(
+      `https://api.stripe.com/v1/customers?email=${encodeURIComponent(email)}&limit=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`
+        }
+      }
+    );
+
+    if (!customerResponse.ok) {
+      throw new Error(`Stripe customer lookup failed (${customerResponse.status})`);
+    }
+
+    const customerData = await customerResponse.json();
+
+    for (const customer of customerData.data || []) {
+      const subscriptionResponse = await fetch(
+        `https://api.stripe.com/v1/subscriptions?customer=${encodeURIComponent(customer.id)}&status=all&limit=100`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`
+          }
+        }
+      );
+
+      if (!subscriptionResponse.ok) {
+        throw new Error(`Stripe subscription lookup failed (${subscriptionResponse.status})`);
+      }
+
+      const subscriptionData = await subscriptionResponse.json();
+
+      if (
+        subscriptionData.data?.some(
+          subscription =>
+            subscription.status === 'active' ||
+            subscription.status === 'trialing'
+        )
+      ) {
+        return true;
+      }
+    }
+  } catch (error) {
+    console.error('Stripe subscription check failed:', error);
+  }
+
+  return false;
+}
+
+async function getEntitlement(userId) {
+  const stored = await runKvCommand('get', entitlementKey(userId));
+
+  if (!stored) return null;
+
+  try {
+    return typeof stored === 'string' ? JSON.parse(stored) : stored;
+  } catch {
+    return null;
+  }
+}
+
+async function createInitialEntitlement(userId, email, isPaid) {
+  const now = new Date();
+
+  const record = isPaid
+    ? {
+        userId,
+        email,
+        trialClaimed: true,
+        trialStartedAt: null,
+        trialEndsAt: null,
+        createdAt: now.toISOString()
+      }
+    : {
+        userId,
+        email,
+        trialClaimed: true,
+        trialStartedAt: now.toISOString(),
+        trialEndsAt: new Date(
+          now.getTime() + TRIAL_LENGTH_MS
+        ).toISOString(),
+        createdAt: now.toISOString()
+      };
+
+  // NX prevents simultaneous requests from restarting or replacing a trial.
+  await runKvCommand(
+    'set',
+    entitlementKey(userId),
+    JSON.stringify(record),
+    'nx'
+  );
+
+  return (await getEntitlement(userId)) || record;
+}
+
+function evaluateEntitlement(record, isPaid) {
+  if (isPaid) {
+    return {
+      plan: 'paid',
+      hasFullAccess: true,
+      trialDaysRemaining: 0
+    };
+  }
+
+  const trialEndsAt = record?.trialEndsAt
+    ? new Date(record.trialEndsAt).getTime()
+    : 0;
+
+  const remainingMilliseconds = trialEndsAt - Date.now();
+
+  if (
+    record?.trialClaimed &&
+    trialEndsAt > 0 &&
+    remainingMilliseconds > 0
+  ) {
+    return {
+      plan: 'trial',
+      hasFullAccess: true,
+      trialDaysRemaining: Math.max(
+        1,
+        Math.ceil(remainingMilliseconds / (24 * 60 * 60 * 1000))
+      )
+    };
+  }
+
+  return {
+    plan: 'free',
+    hasFullAccess: false,
+    trialDaysRemaining: 0
+  };
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      error: 'Method not allowed'
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { sessionToken } = req.body || {};
+
+  if (!sessionToken) {
+    return res.status(401).json({ error: 'No session token' });
   }
 
   try {
-    const authorization = req.headers.authorization || '';
-    const token = authorization.startsWith('Bearer ')
-      ? authorization.slice(7)
-      : '';
-
-    if (!token) {
-      return res.status(401).json({
-        error: 'Authentication required'
-      });
-    }
-
-    const session = await verifyToken(token, {
+    const claims = await verifyToken(sessionToken, {
       secretKey: process.env.CLERK_SECRET_KEY
     });
 
-    const userId = session.sub;
+    const userId = claims.sub;
 
     if (!userId) {
-      return res.status(401).json({
-        error: 'Invalid authentication session'
-      });
+      return res.status(401).json({ error: 'Invalid session' });
     }
 
-    const action = req.body?.action;
-    const usageKey = currentUsageKey(userId);
+    const user = await getClerkUser(userId);
+    const email = getPrimaryEmail(user);
+    const isPaid = await hasActiveStripeSubscription(email);
 
-    if (action === 'check') {
-      const storedCount = await runKvCommand('get', usageKey);
-      const used = Number(storedCount || 0);
+    let record = await getEntitlement(userId);
 
-      return res.status(200).json({
-        allowed: used < FREE_LIMIT,
-        used,
-        remaining: Math.max(0, FREE_LIMIT - used),
-        limit: FREE_LIMIT
-      });
+    if (!record) {
+      record = await createInitialEntitlement(userId, email, isPaid);
     }
 
-    if (action === 'increment') {
-      const used = Number(
-        await runKvCommand('incr', usageKey)
-      );
+    const entitlement = evaluateEntitlement(record, isPaid);
 
-      if (used === 1) {
-        await runKvCommand(
-          'expire',
-          usageKey,
-          KEY_TTL_SECONDS
-        );
-      }
-
-      return res.status(200).json({
-        allowed: used <= FREE_LIMIT,
-        used,
-        remaining: Math.max(0, FREE_LIMIT - used),
-        limit: FREE_LIMIT
-      });
-    }
-
-    return res.status(400).json({
-      error: 'Invalid usage action'
+    return res.status(200).json({
+      userId,
+      email,
+      plan: entitlement.plan,
+      hasFullAccess: entitlement.hasFullAccess,
+      trialStartedAt: record.trialStartedAt,
+      trialEndsAt: record.trialEndsAt,
+      trialDaysRemaining: entitlement.trialDaysRemaining
     });
   } catch (error) {
-    console.error('Usage API error:', error);
+    console.error('Auth error:', error);
 
-    return res.status(500).json({
-      error: 'Unable to check usage'
+    return res.status(401).json({
+      error: 'Authentication failed'
     });
   }
 }
