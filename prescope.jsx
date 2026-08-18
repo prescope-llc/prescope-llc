@@ -517,7 +517,12 @@ function UserMenu({ user, onSignOut }) {
             <div className="flex items-center gap-1.5 mt-1.5">
               {user?.plan === 'paid'
                 ? <span className="mono text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300">✓ Paid plan</span>
-                : <>
+                : user?.plan === 'trial'
+                  ? <>
+                      <span className="mono text-[10px] px-2 py-0.5 rounded-full bg-teal-950 border border-teal-700 text-teal-300">Full-access trial</span>
+                      <span className="mono text-[10px] text-teal-400">{user?.trialDaysRemaining ?? 0} day{user?.trialDaysRemaining === 1 ? '' : 's'} left</span>
+                    </>
+                  : <>
                     <span className="mono text-[10px] px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400">Free tier</span>
                     <span className="mono text-[10px] text-slate-500">{user?.remaining ?? FREE_LIMIT} gen remaining</span>
                   </>
@@ -944,6 +949,32 @@ function AppInner({ authStatus='guest', user=null, canGenerate=true, generations
             )}
           </div>
         </div>
+
+        {authStatus === 'authed' && user?.plan === 'trial' && (
+          <div className="bg-teal-950/60 border border-teal-700 rounded-xl px-4 py-3 mb-6 flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <div className="text-sm font-semibold text-teal-200">Full-access trial</div>
+              <div className="text-xs text-teal-400 mt-0.5">
+                {user?.trialDaysRemaining ?? 0} day{user?.trialDaysRemaining === 1 ? '' : 's'} remaining · Unlimited generations, process flows, Word export, and BA Toolkit
+              </div>
+            </div>
+            <a href="/signup.html" className="text-xs font-semibold bg-teal-400 hover:bg-teal-300 text-slate-950 px-3 py-2 rounded-lg transition-colors">
+              Choose a plan →
+            </a>
+          </div>
+        )}
+
+        {authStatus === 'authed' && user?.plan === 'free' && user?.trialEndsAt && (
+          <div className="bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mb-6 flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <div className="text-sm font-semibold text-slate-200">Your full-access trial has ended</div>
+              <div className="text-xs text-slate-400 mt-0.5">You can continue with 2 free generations per month or upgrade for unlimited access.</div>
+            </div>
+            <a href="/signup.html" className="text-xs font-semibold border border-teal-600 text-teal-300 hover:bg-teal-950 px-3 py-2 rounded-lg transition-colors">
+              View plans →
+            </a>
+          </div>
+        )}
 
         {loading && (
           <div className="bg-teal-950 border border-teal-800 rounded-xl px-4 py-4 mb-6">
@@ -1422,12 +1453,18 @@ function Prescope() {
           return;
         }
 
-       const usage = await checkUsage();
+        const usage = await checkUsage();
 
         if (!cancelled) {
+          const hasFullAccess = userData.plan === 'paid' || usage.hasFullAccess === true || userData.hasFullAccess === true;
+
           setUser({
             ...userData,
-            remaining: usage.remaining ?? FREE_LIMIT
+            plan: userData.plan === 'paid' ? 'paid' : (usage.plan ?? userData.plan),
+            hasFullAccess,
+            remaining: hasFullAccess ? null : (usage.remaining ?? FREE_LIMIT),
+            trialEndsAt: usage.trialEndsAt ?? userData.trialEndsAt ?? null,
+            trialDaysRemaining: usage.trialDaysRemaining ?? userData.trialDaysRemaining ?? 0
           });
           setAuthStatus('authed');
         }
@@ -1449,7 +1486,7 @@ function Prescope() {
   async function handleSignIn() {
     if (!IS_DEPLOYED) {
       // Preview mode: simulate a free user
-      setUser({ userId: 'preview-user', email: 'preview@example.com', plan: 'free', remaining: FREE_LIMIT });
+      setUser({ userId: 'preview-user', email: 'preview@example.com', plan: 'trial', hasFullAccess: true, trialDaysRemaining: 14, remaining: null });
       setAuthStatus('authed');
       setShowLogin(false);
       return;
@@ -1474,8 +1511,18 @@ function Prescope() {
   async function handleGenerate() {
     if (authStatus === 'authed') {
       if (user?.plan === 'paid') return true;
+
       const result = await incrementUsage();
-      setUser(u => ({ ...u, remaining: result.remaining ?? 0 }));
+
+      setUser(current => ({
+        ...current,
+        plan: result.plan ?? current.plan,
+        hasFullAccess: result.hasFullAccess === true,
+        remaining: result.hasFullAccess ? null : (result.remaining ?? 0),
+        trialEndsAt: result.trialEndsAt ?? current.trialEndsAt ?? null,
+        trialDaysRemaining: result.trialDaysRemaining ?? current.trialDaysRemaining ?? 0
+      }));
+
       return result.allowed !== false;
     }
     // Guest
@@ -1486,11 +1533,11 @@ function Prescope() {
   }
 
   const canGenerate = authStatus === 'authed'
-    ? (user?.plan === 'paid' || (user?.remaining ?? FREE_LIMIT) > 0)
+    ? (user?.hasFullAccess === true || (user?.remaining ?? FREE_LIMIT) > 0)
     : (!IS_DEPLOYED || guestRemaining > 0);
 
   const generationsRemaining = authStatus === 'authed'
-    ? (user?.plan === 'paid' ? Infinity : (user?.remaining ?? FREE_LIMIT))
+    ? (user?.hasFullAccess === true ? Infinity : (user?.remaining ?? FREE_LIMIT))
     : guestRemaining;
 
   if (authStatus === 'checking') {
@@ -1511,7 +1558,7 @@ function Prescope() {
       user={user}
       canGenerate={canGenerate}
       generationsRemaining={generationsRemaining}
-      isPaid={authStatus === 'authed' && user?.plan === 'paid'}
+      isPaid={authStatus === 'authed' && user?.hasFullAccess === true}
       onSignIn={() => setShowLogin(true)}
       onSignOut={handleSignOut}
       onGenerate={handleGenerate}
