@@ -5,24 +5,15 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-FE32V5ZMW8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-FE32V5ZMW8');
   </script>
 
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-
   <title>Prescope™ — Structure work. Start building.</title>
-
-  <meta
-    name="description"
-    content="AI-powered work decomposition for BAs, POs, PMs and Project Managers."
-  />
+  <meta name="description" content="AI-powered work decomposition for BAs, POs, PMs and Project Managers."/>
 
   <link rel="manifest" href="/manifest.json"/>
   <meta name="theme-color" content="#0D9488"/>
@@ -32,29 +23,20 @@
   <link rel="apple-touch-icon" href="/icon.svg"/>
 
   <!-- React + Babel -->
-  <script
-    crossorigin
-    src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js">
-  </script>
-
-  <script
-    crossorigin
-    src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js">
-  </script>
-
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 
   <!-- Tailwind and Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    window.react = window.React;
-  </script>
-
+  <script>window.react = window.React;</script>
   <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
 
-  <!-- Clerk Authentication -->
+  <!--
+    Clerk must load before prescope.jsx executes. This script is intentionally
+    synchronous; do not add async or defer here.
+  -->
   <script
-    defer
     crossorigin="anonymous"
     data-clerk-publishable-key="pk_live_Y2xlcmsucHJlc2NvcGVzb2x1dGlvbnMuY29tJA"
     src="https://clerk.prescopesolutions.com/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
@@ -62,27 +44,14 @@
   </script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      min-height: 100%;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { min-height: 100%; }
     body {
       background: #020617;
       color: #f1f5f9;
       font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-
-    #root {
-      min-height: calc(100vh - 86px);
-    }
-
+    #root { min-height: calc(100vh - 86px); }
     .loading {
       display: flex;
       align-items: center;
@@ -91,15 +60,18 @@
       color: #14b8a6;
       font-size: 18px;
     }
-
-    /* Prescope footer */
+    .loading-error {
+      color: #fca5a5;
+      text-align: center;
+      padding: 24px;
+      line-height: 1.6;
+    }
     .prescope-site-footer {
       width: 100%;
       background: #020617;
       border-top: 1px solid #1e293b;
       padding: 28px 24px;
     }
-
     .prescope-footer-inner {
       width: 100%;
       max-width: 1200px;
@@ -109,14 +81,12 @@
       align-items: center;
       gap: 40px;
     }
-
     .prescope-footer-logo {
       color: #f1f5f9;
       font-size: 16px;
       font-weight: 700;
       white-space: nowrap;
     }
-
     .prescope-footer-links {
       display: flex;
       align-items: center;
@@ -124,26 +94,20 @@
       flex-wrap: wrap;
       gap: 28px;
     }
-
     .prescope-footer-links a {
       color: #64748b;
       font-size: 14px;
       text-decoration: none;
       transition: color 0.2s ease;
     }
-
     .prescope-footer-links a:hover,
-    .prescope-footer-links a:focus {
-      color: #14b8a6;
-    }
-
+    .prescope-footer-links a:focus { color: #14b8a6; }
     .prescope-footer-copy {
       color: #475569;
       font-size: 13px;
       text-align: right;
       white-space: nowrap;
     }
-
     @media (max-width: 850px) {
       .prescope-footer-inner {
         grid-template-columns: 1fr;
@@ -151,40 +115,27 @@
         gap: 18px;
         text-align: center;
       }
-
-      .prescope-footer-links {
-        gap: 16px 24px;
-      }
-
-      .prescope-footer-copy {
-        text-align: center;
-        white-space: normal;
-      }
+      .prescope-footer-links { gap: 16px 24px; }
+      .prescope-footer-copy { text-align: center; white-space: normal; }
     }
   </style>
 </head>
 
 <body>
-  <!-- React application -->
   <div id="root">
     <div class="loading">Loading Prescope™...</div>
   </div>
 
-  <!-- Site footer: keep this outside #root -->
   <footer class="prescope-site-footer">
     <div class="prescope-footer-inner">
       <div class="prescope-footer-logo">Prescope™</div>
-
       <nav class="prescope-footer-links" aria-label="Footer navigation">
         <a href="/terms.html">Terms of Service</a>
         <a href="/privacy.html">Privacy Policy</a>
         <a href="/refunds.html">Refund Policy</a>
         <a href="/contact.html">Contact</a>
       </nav>
-
-      <div class="prescope-footer-copy">
-        © 2026 Prescope. All rights reserved.
-      </div>
+      <div class="prescope-footer-copy">© 2026 Prescope. All rights reserved.</div>
     </div>
   </footer>
 
@@ -192,32 +143,21 @@
   <script>
     window.storage = window.storage || {
       async get(key) {
-        return {
-          value: window.localStorage.getItem(key)
-        };
+        return { value: window.localStorage.getItem(key) };
       },
-
       async set(key, value) {
         window.localStorage.setItem(key, value);
-
-        return {
-          key,
-          value
-        };
+        return { key, value };
       },
-
       async delete(key) {
         window.localStorage.removeItem(key);
-
-        return {
-          key
-        };
+        return { key };
       }
     };
   </script>
 
-  <!-- Prescope React application -->
-  <script type="text/babel" src="/prescope.jsx"></script>
+  <!-- Prescope React application: version query prevents stale cached JSX -->
+  <script type="text/babel" src="/prescope.jsx?v=reverse-trial-2"></script>
 
   <!-- Register service worker -->
   <script>
